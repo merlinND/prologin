@@ -67,6 +67,16 @@ public class Map {
 	}
 	
 	/**
+	 * Determine if we can build a tower at the given spot.
+	 * TODO: check that other constraints are checked (proximity to previous towers, free terrain, etc)
+	 * @param current
+	 * @return
+	 */
+	public static boolean canBuild(Position target) {
+		return Interface.constructible(target, Interface.moi());
+	}
+	
+	/**
 	 * Get a list of the **walkable** squares adjacent to `p`
 	 * @param p
 	 * @return 
@@ -75,16 +85,15 @@ public class Map {
 		List<Position> result = new ArrayList<Position>();
 		result.add(p.left());
 		result.add(p.right());
-		result.add(p.left());
-		result.add(p.left());
+		result.add(p.up());
+		result.add(p.down());
 		
 		Iterator<Position> it = result.iterator();
 		while (it.hasNext()) {
 			Position candidate = it.next();
-			if (!candidate.isValid() || isWalkable(candidate))
+			if (!candidate.isValid() || !isWalkable(candidate))
 				it.remove();
 		}
-		
 		return result;
 	}
 	

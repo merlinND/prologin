@@ -7,26 +7,32 @@ import java.util.List;
 public class AloneStrategy extends Strategy {
 
 	public AloneStrategy() {
-		Objective o = new DefendTargetObjective(Map.ARTIFACT);
+		Objective o = new DefendObjective(Map.ARTIFACT);
 		o.setPriority(1f);
 		objectives.add(o);
 
 		// TODO: make the closer fountains more prioritary
-		o = new DefendTargetObjective(Map.FOUNTAIN_N);
+		o = new DefendObjective(Map.FOUNTAIN_N);
 		o.setPriority(0.5f);
 		objectives.add(o);
-		o = new DefendTargetObjective(Map.FOUNTAIN_E);
+		o = new DefendObjective(Map.FOUNTAIN_E);
 		o.setPriority(0.5f);
 		objectives.add(o);
-		o = new DefendTargetObjective(Map.FOUNTAIN_S);
+		o = new DefendObjective(Map.FOUNTAIN_S);
 		o.setPriority(0.5f);
 		objectives.add(o);
-		o = new DefendTargetObjective(Map.FOUNTAIN_W);
+		o = new DefendObjective(Map.FOUNTAIN_W);
 		o.setPriority(0.5f);
 		objectives.add(o);
 		
-		// When everything else is taken care of, protect the base
-		o = new DefendTargetObjective(Map.base);
+		List<Position> around = Map.getNeighbors(Map.base);
+		for (Position p : around) {
+			o = new BuildTowerObjective(p);
+			o.setPriority(0.1f);
+			objectives.add(o);
+		}
+		// When everything else is taken care of, protect the base by spamming sorcerers
+		o = new DefendObjective(Map.base);
 		o.setPriority(0f);
 		objectives.add(o);
 	}

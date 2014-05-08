@@ -1,24 +1,21 @@
 
-public class DefendTargetObjective extends Objective {
+public class DefendObjective extends SpatialObjective {
 	/*
 	 * PROPERTIES
 	 */
-	protected Position target;
 	
 	/*
 	 * METHODS
 	 */
-	public DefendTargetObjective(Position target) {
-		this.target = target;
+	public DefendObjective(Position target) {
+		super(target);
 	}
 	
 	@Override
 	public boolean perform(Phase phase, Agent owner) {
-		System.out.println("Objective: defend target " + target);
-		
 		// As a tower: defending implies killing opponents closest to the position
 		if (owner instanceof Tower) {
-			
+			// TODO
 		}
 		// As a sorcerer : defending implies moving to the position and staying there
 		// TODO: eventually, build a tower to defend that same target (in construction phase)
@@ -33,7 +30,4 @@ public class DefendTargetObjective extends Objective {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	public Position getTarget() {
-		return target;
-	}
 }

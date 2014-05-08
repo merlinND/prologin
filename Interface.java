@@ -57,6 +57,26 @@ class Position {
 			return (this.x == other.x && this.y == other.y);
 		}
 	}
+	
+	public boolean isValid() {
+		return (x >= 0
+				&& y >= 0
+				&& x < Interface.TAILLE_TERRAIN
+				&& y < Interface.TAILLE_TERRAIN);
+	}
+	
+	public Position left() {
+		return new Position(x - 1, y);
+	}
+	public Position right() {
+		return new Position(x + 1, y);
+	}
+	public Position up() {
+		return new Position(x, y - 1);
+	}
+	public Position down() {
+		return new Position(x, y + 1);
+	}
 }
 
 // Représente une tourelle

@@ -49,10 +49,7 @@ public class Mothership {
 				Objective o = l.get(i);
 				// TODO: better evaluate the quantity of effort going on
 				if (i == l.size() - 1 || efforts.get(o).size() < 1) {
-					// TODO: support different objective kind
-					int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
-					Sorcerers s = new Sorcerers(Map.base, n);
-					addAgent(s, o);
+					makeEffort(o);
 				}
 				
 				i++;
@@ -69,6 +66,22 @@ public class Mothership {
 		default:
 			System.err.println("Unrecongnized phase!");
 			break;
+		}
+	}
+	
+	/**
+	 * Make an effort towards the given objective
+	 * TODO: support more objective types
+	 * @param o
+	 */
+	protected void makeEffort(Objective o) {
+		if (o instanceof BuildTowerObjective) {
+			o.perform(Phase.BUILD, null);
+		}
+		else {
+			int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
+			Sorcerers s = new Sorcerers(Map.base, n);
+			addAgent(s, o);
 		}
 	}
 	
@@ -101,8 +114,10 @@ public class Mothership {
 	
 	public void addAgent(Agent agent, Objective assignedTo) {
 		agents.add(agent);
-		agent.addCompulsoryObjective(assignedTo);
-		efforts.get(assignedTo).add(agent);
+		if (assignedTo != null) {
+			agent.addCompulsoryObjective(assignedTo);
+			efforts.get(assignedTo).add(agent);
+		}
 	}
 	public void removeAgent(Agent agent) {
 		// TODO: remove agent from **all** lists (efforts)

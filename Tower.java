@@ -17,7 +17,7 @@ public class Tower extends Agent {
 	 */
 	public Tower(Position position) {
 		super(position);
-		addObjective(new DefendTargetObjective(getPosition()));
+		addObjective(new DefendObjective(getPosition()));
 	}
 	
 	@Override
