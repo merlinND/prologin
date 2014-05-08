@@ -24,10 +24,9 @@ public abstract class Agent {
 	public abstract void update();
 	
 	public void performAction(Phase phase) {
-		objectives.peek().perform();
+		objectives.peek().perform(phase, this);
 		// TODO: clear completed objectives
 	}
-	
 	
 	/*
 	 * GETTERS & SETTERS

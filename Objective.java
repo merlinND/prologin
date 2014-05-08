@@ -17,7 +17,7 @@ public abstract class Objective implements Comparable<Objective> {
 		
 	}
 	
-	public abstract boolean perform();
+	public abstract boolean perform(Phase phase, Agent owner);
 	
 	@Override
 	public int compareTo(Objective other) {

@@ -43,14 +43,20 @@ public class Mothership {
 			
 			// Go through the objectives and assign as much effort as needed
 			// TODO: make sure we're using the right priority
-			for (Objective o : strategy.getObjectives()) {
+			List<Objective> l = strategy.getObjectives();
+			int i = 0;
+			while (i < l.size() && getResources() > 0) {
+				Objective o = l.get(i);
 				// TODO: better evaluate the quantity of effort going on
-				if (efforts.get(o).size() < 1) {
+				if (i == l.size() - 1 || efforts.get(o).size() < 1) {
 					// TODO: support different objective kind
-					Sorcerers s = new Sorcerers(Map.base, 1);
+					int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
+					Sorcerers s = new Sorcerers(Map.base, n);
 					addAgent(s, o);
 				}
-			}			
+				
+				i++;
+			}
 			break;
 			
 		case MOVE:
@@ -101,5 +107,12 @@ public class Mothership {
 	public void removeAgent(Agent agent) {
 		// TODO: remove agent from **all** lists (efforts)
 		throw new NotImplementedException();
+	}
+	
+	/**
+	 * @return The current amount of "magic" available
+	 */
+	public int getResources() {
+		return Interface.magie(Interface.moi());
 	}
 }

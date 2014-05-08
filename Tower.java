@@ -31,7 +31,7 @@ public class Tower extends Agent {
 	 */
 	public void performAction(Phase phase) {
 		if (phase == Phase.SHOOT)
-			objectives.peek().perform();
+			objectives.peek().perform(phase, this);
 	}
 	
 	/*
