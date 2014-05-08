@@ -1,10 +1,10 @@
 rules: /usr/lib/libprologin2014.so
 verbose: 3
 clients:
-  - ./current.so
-  - ./noop.so
-  - ./noop.so
-  - ./noop.so
+  - ./current/champion.so
+  - ./noop/champion.so
+  - ./noop/champion.so
+  - ./noop/champion.so
 names:
   - Player 1
   - Player 2

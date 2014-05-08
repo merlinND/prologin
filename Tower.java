@@ -20,6 +20,11 @@ public class Tower extends Agent {
 		addObjective(new DefendTargetObjective(getPosition()));
 	}
 	
+	@Override
+	public void update() {
+		// TODO Check if dead
+	}
+	
 	/**
 	 * Towers can only do things in "shoot" phase
 	 * TODO: towers don't have variable objectives?

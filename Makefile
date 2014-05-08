@@ -17,7 +17,7 @@ champion-srcs += interface.cc
 include ../includes/rules.mk
 
 run: all
-	cp champion.so run/current.so
-	cp *.class run/
+	cp champion.so run/current/champion.so
+	cp *.class run/current
 	(cd run; stechec2-run ./config.yml)
-	rm -f run/*.class
+	# rm -f run/*.class

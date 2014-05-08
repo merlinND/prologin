@@ -16,6 +16,13 @@ public abstract class Agent {
 		objectives = new PriorityQueue<Objective>();
 	}
 
+	/**
+	 * Check if the agent is still alive and well.
+	 * Evaluate the progress on all objectives.
+	 * Detect danger and adjust objectives appropriately.
+	 */
+	public abstract void update();
+	
 	public void performAction(Phase phase) {
 		objectives.peek().perform();
 		// TODO: clear completed objectives
