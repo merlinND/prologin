@@ -25,6 +25,7 @@ public class AloneStrategy extends Strategy {
 		o.setPriority(0.5f);
 		objectives.add(o);
 		
+		// TODO: build defense towers further around (otherwise some of the range is wasted)
 		List<Position> around = Map.getNeighbors(Map.base);
 		for (Position p : around) {
 			o = new BuildTowerObjective(p);
