@@ -1,0 +1,14 @@
+rules: /usr/lib/libprologin2014.so
+verbose: 3
+clients:
+  - ./current.so
+  - ./noop.so
+  - ./noop.so
+  - ./noop.so
+names:
+  - Player 1
+  - Player 2
+  - Player 3
+  - Player 4
+spectators:
+  - /usr/share/stechec2/prologin2014/gui/gui.so

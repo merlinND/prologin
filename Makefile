@@ -10,3 +10,9 @@ champion-ldflags = -Wl,-rpath -Wl,$(JAVA_HOME)/jre/lib/amd64/server/ -L$(JAVA_HO
 champion-dists = interface.hh
 champion-srcs += interface.cc
 include ../includes/rules.mk
+
+run: all
+	cp champion.so run/current.so
+	cp *.class run/
+	(cd run; stechec2-run ./config.yml)
+	rm -f run/*.class

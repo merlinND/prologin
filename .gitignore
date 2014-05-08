@@ -1,0 +1,12 @@
+# Java
+*.class
+.classpath
+.project
+
+# Build
+*.o
+*.o.d
+*.so
+
+# Other
+*~
