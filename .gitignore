@@ -6,7 +6,7 @@
 # Build
 *.o
 *.o.d
-*.so
+champion.so
 
 # Other
 *~
