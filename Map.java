@@ -42,6 +42,17 @@ public class Map {
 		return n;
 	}
 	
+	public static List<Tourelle> getAllOpponentTowers(Position p) {
+		List<Tourelle> result = new ArrayList<Tourelle>();
+		for (int j : Interface.adversaires()) {
+			if (j != Interface.moi()) {
+				for (Tourelle t : Interface.tourelles_joueur(j))
+					result.add(t);
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * @return The number of towers that we can still build
 	 */
@@ -297,5 +308,30 @@ public class Map {
 			}
 		}
 		return closest;
+	}
+	
+	/**
+	 * Measure the total danger at this position:
+	 * - Sorcerers in range
+	 * - Nearby towers
+	 * @param p
+	 * @return The danger measured in number of potentially dead sorcerers
+	 */
+	public static float evaluateDanger(Position p) {
+		float danger = 0f;
+		
+		// Count the dangerous sorcerers around here
+		List<Position> area = getNeighbors(p, Interface.PORTEE_SORCIER);
+		for (Position a : area)
+			danger += numberOfOpponentSorcerers(a);
+
+		// Count the damage points that could be dealt by a nearby turret
+		List<Tourelle> towers = getAllOpponentTowers(p);
+		for (Tourelle t : towers) {
+			if (distance(t.pos, p) <= t.portee)
+				danger += t.attaque;
+		}
+		
+		return danger;
 	}
 }
