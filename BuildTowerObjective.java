@@ -30,7 +30,6 @@ public class BuildTowerObjective extends SpatialObjective {
 	public boolean perform(Phase phase, Agent owner) {
 		
 		if (phase == Phase.BUILD) {
-			Logger.log("Trying to build tower on " + getTarget(), 3);
 			// ----- If we can build right now, try and do it
 			if (canBuild(getTarget())) {
 				// TODO: support larger tower range (when more defensive capacity is needed?)

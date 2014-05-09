@@ -9,7 +9,7 @@ public class BalancedStrategy extends Strategy {
 		// ----- Begin part
 		// Fortify the base
 		o = new DefendBaseObjective();
-		o.setPriority(0.8f);
+		o.setPriority(1f);
 		objectives.get(Part.BEGIN).add(o);
 		
 		// ----- Run part
@@ -44,7 +44,7 @@ public class BalancedStrategy extends Strategy {
 		
 		// ----- Final part
 		// Rush to the artifact
-		o = new DefendObjective(Map.ARTIFACT);
+		o = new OccupyObjective(Map.ARTIFACT);
 		o.setPriority(1f);
 		objectives.get(Part.END).add(o);
 
@@ -57,7 +57,7 @@ public class BalancedStrategy extends Strategy {
 	
 	@Override
 	protected boolean goToEnd(int roundCount) {
-		return (roundCount >= (Interface.MAX_TOUR - 10));
+		return (roundCount >= 15); //(Interface.MAX_TOUR - 10));
 	}
 
 }

@@ -9,6 +9,14 @@ public class NoopObjective extends Objective {
 		return true;
 	}
 
+	@Override
+	public boolean isSatisfied() {
+		return true;
+	}
+	@Override
+	public boolean isCompleted() {
+		return false;
+	}
 	
 	@Override
 	public String toString() {

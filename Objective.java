@@ -40,9 +40,17 @@ public abstract class Objective implements Comparable<Objective> {
 		this.priority = priority;
 	}
 	
+	/**
+	 * @return Whether or not this objective currently needs more work
+	 */
+	public boolean isSatisfied() {
+		return false;
+	}
+	
 	public boolean isCompleted() {
 		return completed;
 	}
+	
 	/**
 	 * Set this objective to completed, which will cause it
 	 * to be removed from its owner's objectives.

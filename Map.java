@@ -62,7 +62,13 @@ public class Map {
 	public static boolean hasTower(Position p) {
 		return (Interface.info_case(p) == CaseInfo.CASE_TOURELLE);
 	}
-	
+	public static boolean hasControl(Position p) {
+		return hasControl(p, Interface.moi());
+	}
+	public static boolean hasControl(Position p, int player) {
+		Logger.log(p + " is controlled by " + Interface.joueur_case(p) + " ?= " + player);
+		return (Interface.joueur_case(p) == player);
+	}
 	
 	/**
 	 * Find **our** closest tower near `from`.

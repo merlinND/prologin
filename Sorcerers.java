@@ -8,8 +8,8 @@ public class Sorcerers extends Agent {
 	/*
 	 * METHODS
 	 */
-	public Sorcerers(Position position, int size) {
-		super(position);
+	public Sorcerers(int size) {
+		super(Map.base);
 		
 		// Create the nearest possible number of sorcerers to `size`
 		Erreur status = null;
@@ -27,7 +27,7 @@ public class Sorcerers extends Agent {
 	}
 	
 	@Override
-	public void update() {	
+	public void update() {
 		int n = Interface.nb_sorciers(getPosition(), Interface.moi());
 		if (n <= 0) {
 			Logger.log("The sorcerers who were on " + getPosition() + " were all killed.", 3);
@@ -41,7 +41,6 @@ public class Sorcerers extends Agent {
 	public void moveClosestTo(Position target) {
 		if (getPosition().equals(target))
 			return;
-		
 		Position destination = getPosition();
 		Position[] steps = Map.path(getPosition(), target);
 		// The farthest step attainable is at most PORTEE_SORCIER away

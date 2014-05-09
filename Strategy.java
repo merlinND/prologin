@@ -63,10 +63,14 @@ public abstract class Strategy {
 	}
 	/**
 	 * What to do when everything else it taken care of
+	 * @warning Only in RUN phase
 	 * @return
 	 */
 	public List<Objective> getIdleObjectives() {
-		return objectives.get(Part.IDLE);
+		if (currentPart == Part.RUN)
+			return objectives.get(Part.IDLE);
+		else
+			return new ArrayList<Objective>();
 	}
 	
 	/**

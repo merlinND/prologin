@@ -51,10 +51,9 @@ public class Mothership {
 			int i = 0;
 			while (i < l.size()) {
 				Objective o = l.get(i);
-				//  while getResources() > 0
 				// TODO: implement resource management
 				// TODO: better evaluate the quantity of effort going on
-				if (efforts.get(o).size() < 1 && !o.isCompleted()) {
+				if (!o.isSatisfied() && !o.isCompleted()) {
 					makeEffort(o);
 				}
 				
@@ -79,7 +78,7 @@ public class Mothership {
 			break;
 			
 		default:
-			System.err.println("Unrecongnized phase!");
+			Logger.err("Unrecongnized phase!");
 			break;
 		}
 	}
@@ -99,20 +98,21 @@ public class Mothership {
 		else if (o instanceof DefendBaseObjective) {
 			addAgent(new HomeAgent(Map.base), o);
 		}
-		else {
+		else if (o instanceof OccupyObjective){
 			int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
 			if (n > 0) {
-				Sorcerers s = new Sorcerers(Map.base, n);
+				Sorcerers s = new Sorcerers(n);
 				addAgent(s, o);
 			}
+		}
+		else {
+			Logger.err("What effort should we do for " + o + " ?");
 		}
 	}
 	
 	/**
 	 * Update the strategy.
 	 * Sync the agents with the game state.
-	 * TODO: update each agent
-	 * TODO: remove the dead agents
 	 */
 	public void update() {
 		strategy.update(Interface.tour_actuel());
