@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -106,6 +109,64 @@ public class Map {
 		default:
 			return false;
 		}
+	}
+	
+	/**
+	 * Check if a **walkable** square contains a danger.
+	 * TODO: take into account nearby towers!
+	 * @param p
+	 * @return
+	 */
+	public static boolean hasDanger(Position p) {
+		return (Interface.joueur_case(p) != Interface.moi());
+	}
+	
+	/**
+	 * Use BFS to find a walkable path between `from` and `to`
+	 * TODO: another version that takes danger into account
+	 * @see Interface.chemin
+	 * @param from
+	 * @param to
+	 * @return a list of the steps to take
+	 */
+	public static Position[] path(Position from, Position to) {
+		Stack<Position> path = new Stack<Position>();
+		
+		if (!from.equals(to)) {
+			Queue<Position> q = new LinkedList<Position>();
+			Set<Position> seen = new HashSet<Position>();
+			HashMap<Position, Position> parents = new HashMap<Position, Position>();
+			
+			// Start from the end
+			seen.add(to);
+			q.add(to);
+			Position current = to;
+			while (!q.isEmpty() && !current.equals(from)) {
+				current = q.poll();
+				List<Position> adj = getNeighbors(current);
+				// TODO: prioritize alternating movements (=> will create diagonals)
+				for (Position p : adj) {
+					if (!seen.contains(p)) {
+						seen.add(p);
+						parents.put(p, current);
+						q.add(p);
+					}
+				}
+			}
+			
+			// If we've reached the target, rewind to gather the steps
+			while (!current.equals(to)) {
+				path.add(current);
+				current = parents.get(current);
+			}
+			path.add(current);
+		}
+
+		// Convert to array for backwards compatibility with `Interface.chemin`
+		Position[] result = new Position[path.size()];
+		for (int i = 0; i < path.size(); ++i)
+			result[i] = path.get(i);
+		return result;
 	}
 	
 	/**

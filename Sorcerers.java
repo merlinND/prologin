@@ -43,8 +43,7 @@ public class Sorcerers extends Agent {
 			return;
 		
 		Position destination = getPosition();
-		// TODO: re-implement `chemin` to be faster
-		Position[] steps = Interface.chemin(getPosition(), target);
+		Position[] steps = Map.path(getPosition(), target);
 		// The farthest step attainable is at most PORTEE_SORCIER away
 		int distance = 0;
 		while (distance < Interface.PORTEE_SORCIER && distance < steps.length)
