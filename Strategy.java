@@ -29,21 +29,23 @@ public abstract class Strategy {
 	 * @param roundCount The number of rounds elapsed
 	 */
 	public void update(int roundCount) {
-		// Begin => Run: only when all objectives are complete
-		if (currentPart == Part.BEGIN) {
-			boolean allDone = true;
-			for (Objective o : getObjectives())
-				allDone = (allDone && o.isCompleted());
-			if (allDone)
-				setPart(Part.RUN);
-		}
+		// Begin => Run: by default, when all objectives are complete
+		if (currentPart == Part.BEGIN && goToRun(roundCount)) 
+			setPart(Part.RUN);
 		// Run => end: depends on the strategy
-		else if (currentPart == Part.RUN) {
-			if (goToEnd(roundCount))
-				setPart(Part.END);
-		}
-		
-		Logger.log("We are at round " + roundCount + ", now at strategy part " + currentPart);
+		else if (currentPart == Part.RUN && goToEnd(roundCount))
+			setPart(Part.END);
+	}
+	
+	/**
+	 * Should we go to the Run part of the strategy?
+	 * By default, we do when each objective is complete
+	 */
+	protected boolean goToRun(int roundCount) {
+		boolean allDone = true;
+		for (Objective o : getObjectives())
+			allDone = (allDone && o.isCompleted());
+		return allDone;
 	}
 	
 	/**
@@ -72,7 +74,7 @@ public abstract class Strategy {
 	 * @param part
 	 */
 	protected void setPart(Part part) {
-		Logger.log("----- Strategy going into part " + part + " -----");
+		Logger.log("----- Strategy going into part " + part + " -----", 1);
 		
 		this.currentPart = part;
 		Mothership.getInstance().resetObjectives();

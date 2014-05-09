@@ -24,14 +24,14 @@ public class Tower extends Agent {
 		this.tower = tower;
 		addObjective(new DefendObjective(getPosition()));
 
-		Logger.log("Created a tower on " + position, 2);
+		Logger.log("Created a tower on " + position, 3);
 	}
 	
 	@Override
 	public void update() {
 		Tourelle t = Interface.tourelle_case(getPosition());
 		if (t.vie <= 0) {
-			Logger.log("The tower which was on " + getPosition() + " was destroyed.", 2);
+			Logger.log("The tower which was on " + getPosition() + " was destroyed.", 3);
 			markDead();
 		}
 		else {

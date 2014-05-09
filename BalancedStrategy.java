@@ -1,19 +1,21 @@
 import java.util.List;
 
-/**
- * Basic strategy: completely ignore that there might be other players.
- * @author Merlin Nimier-David
- */
-public class AloneStrategy extends Strategy {
 
-	public AloneStrategy() {
+public class BalancedStrategy extends Strategy {
+
+	public BalancedStrategy() {
+		Objective o;
+		
 		// ----- Begin part
-		// Empty
+		// Fortify the base
+		o = new DefendBaseObjective();
+		o.setPriority(0.8f);
+		objectives.get(Part.BEGIN).add(o);
 		
 		// ----- Run part
 		// Take all interesting points
+		// TODO: refactor duplicate code
 		List<Objective> run = objectives.get(Part.RUN);
-		Objective o;
 		
 		// The closer fountains are more important
 		Position[] fountains = {
@@ -36,21 +38,26 @@ public class AloneStrategy extends Strategy {
 			o.setPriority(priority);
 			run.add(o);
 		}
-		// Take the artifact
-		o = new DefendObjective(Map.ARTIFACT);
-		o.setPriority(1f);
-		run.add(o);
 		
 		// ----- Idle part
-		objectives.get(Part.IDLE).add(o);
+		objectives.get(Part.IDLE).add(new NoopObjective());
 		
 		// ----- Final part
-		// Empty
-	}
+		// Rush to the artifact
+		o = new DefendObjective(Map.ARTIFACT);
+		o.setPriority(1f);
+		objectives.get(Part.END).add(o);
 
+	}
+	
+	@Override
+	protected boolean goToRun(int roundCount) {
+		return (roundCount >= 10);
+	}
+	
 	@Override
 	protected boolean goToEnd(int roundCount) {
-		// This strategy doesn't have an end part
-		return false;
+		return (roundCount >= (Interface.MAX_TOUR - 10));
 	}
+
 }

@@ -63,14 +63,14 @@ public class DefendObjective extends SpatialObjective {
 				n = Math.min(n, owner.getCapacity() - nShots);
 				Erreur status = Interface.tirer(n, owner.getPosition(), p);
 				if (status == Erreur.OK) {
-					Logger.log("Shooting " + p + " (" + n + " arrows)", 3);
+					Logger.log("Shooting " + p + " (" + n + " arrows)", 4);
 					nShots += n;
 				}
 			}
 		}
 		
 		if (nShots > 0)
-			Logger.log("Shot a total of " + nShots + " arrows", 3);
+			Logger.log("Shot a total of " + nShots + " arrows", 4);
 		return nShots;
 	}
 	

@@ -77,8 +77,8 @@ public abstract class Agent {
 	public PriorityQueue<Objective> getObjectives() {
 		return objectives;
 	}
-	public void setObjectives(PriorityQueue<Objective> objectives) {
-		this.objectives = objectives;
+	public void clearObjectives() {
+		this.objectives.clear();
 	}
 	
 	public boolean isDead() {

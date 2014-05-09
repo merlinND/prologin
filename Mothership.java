@@ -36,7 +36,7 @@ public class Mothership {
 		waitingList = new ArrayList<Entry<Agent, Objective>>();
 		efforts = new HashMap<Objective, List<Agent>>();
 		
-		setStrategy(new AloneStrategy());
+		setStrategy(new BalancedStrategy());
 	}
 	
 	public void play(Phase phase) {
@@ -156,13 +156,21 @@ public class Mothership {
 	}
 	
 	public void resetObjectives() {
-		// TODO: how to reassign the existing agents?
 		efforts.clear();
 		for (Entry<Agent, Objective> e : waitingList)
 			e.setValue(null);
 		
 		for (Objective o : strategy.getObjectives())
 			efforts.put(o, new ArrayList<Agent>());
+		// We reassign all the agents to the most prioritary objective
+		// TODO: reassign the agents more intelligently?
+		if (strategy.getObjectives().size() > 0) {
+			Objective first = strategy.getObjectives().get(0);
+			for(Agent a : agents) {
+				a.clearObjectives();
+				assignAgentTo(a, first);
+			}
+		}
 	}
 	
 	/**
@@ -193,11 +201,15 @@ public class Mothership {
 	 */
 	protected void addAgent(Agent agent, Objective assignedTo) {
 		agents.add(agent);
-		if (assignedTo != null && efforts.containsKey(assignedTo)) {
-			agent.addCompulsoryObjective(assignedTo);
-			efforts.get(assignedTo).add(agent);
-		}
+		if (assignedTo != null && efforts.containsKey(assignedTo))
+			assignAgentTo(agent, assignedTo);
 	}
+	
+	protected void assignAgentTo(Agent agent, Objective assignedTo) {
+		agent.addCompulsoryObjective(assignedTo);
+		efforts.get(assignedTo).add(agent);
+	}
+	
 	/**
 	 * Remove the agent corresponding to this iterator from all lists.
 	 * @param it
