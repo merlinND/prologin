@@ -45,6 +45,9 @@ public abstract class Objective implements Comparable<Objective> {
 		this.priority = priority;
 	}
 	
+	public int getSpendingLimit() {
+		return spendingLimit;
+	}
 	public void setSpendingLimit(int spendingLimit) {
 		this.spendingLimit = spendingLimit;
 	}

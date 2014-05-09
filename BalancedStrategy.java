@@ -1,9 +1,14 @@
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class BalancedStrategy extends Strategy {
 
+	protected List<Objective> fountainObjectives;
+	
 	public BalancedStrategy() {
+		fountainObjectives = new ArrayList<Objective>();
+		
 		Objective o;
 		
 		// ----- Begin part
@@ -26,7 +31,7 @@ public class BalancedStrategy extends Strategy {
 		};
 		int maxFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_E),
 			minFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_N),
-			maxFountainSpending = 800; //...times 2
+			maxFountainSpending = 1500; //...times 2
 		float closeFountainPriority = 0.5f,
 			  farFountainPriority = 0.1f;
 		for (Position f : fountains) {
@@ -38,18 +43,26 @@ public class BalancedStrategy extends Strategy {
 			o = new OccupyObjective(f);
 			o.setPriority(priority);
 			o.setSpendingLimit((int)(maxFountainSpending * priority));
-			run.add(o);
+			System.out.println("Will spend " + o.getSpendingLimit() + " on " + o);
+			fountainObjectives.add(o);
 		}
+		run.addAll(fountainObjectives);
 		
 		// ----- Idle part
 		objectives.get(Part.IDLE).add(new NoopObjective());
 		
 		// ----- Final part
 		// Rush to the artifact
+		List<Objective> end = objectives.get(Part.END);
 		o = new OccupyObjective(Map.ARTIFACT);
 		o.setPriority(1f);
-		objectives.get(Part.END).add(o);
-
+		end.add(o);
+		// And try to keep the fountains under control
+		for (Objective f : fountainObjectives) {
+			f.setPriority(0.1f);
+			f.setSpendingLimit(200);
+			end.add(f);
+		}
 	}
 	
 	@Override
