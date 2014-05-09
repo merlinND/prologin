@@ -179,7 +179,7 @@ public class Mothership {
 	 */
 	protected void addAgent(Agent agent, Objective assignedTo) {
 		agents.add(agent);
-		if (assignedTo != null) {
+		if (assignedTo != null && efforts.containsKey(assignedTo)) {
 			agent.addCompulsoryObjective(assignedTo);
 			efforts.get(assignedTo).add(agent);
 		}
