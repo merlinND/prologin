@@ -65,8 +65,10 @@ public class BuildTowerObjective extends SpatialObjective {
 			Position closestTower = Map.getClosestTowerPosition(getTarget());
 			if (Map.distance(getTarget(), closestTower) > Interface.CONSTRUCTION_TOURELLE)  {
 				// Go ahead and ask to build the closest missing one
+				// TODO: but only build it if we can afford it (resource allocation)
 				Position[] path = Interface.chemin(getTarget(), closestTower);
-				if (path.length > 0) {
+				int towersNeeded = (path.length % Interface.CONSTRUCTION_TOURELLE);
+				if (path.length > 0 && towersNeeded < Map.possibleTowers()) {
 					Position current = getTarget();
 					int d = 0;
 					while (d < Interface.CONSTRUCTION_TOURELLE && d < path.length) {
@@ -74,7 +76,6 @@ public class BuildTowerObjective extends SpatialObjective {
 						d++;
 					}
 					// Ask for it to be built
-					// TODO: figure out a way for this (future) new agent to be registered with the Mothership as participating towards the right goal
 					Objective intermediate = new BuildTowerObjective(current, getRootObjective());
 					intermediate.setPriority(getPriority() * 1.01f);
 					owner.addObjective(intermediate);

@@ -39,6 +39,12 @@ public class Map {
 		return n;
 	}
 	
+	/**
+	 * @return The number of towers that we can still build
+	 */
+	public static int possibleTowers() {
+		return (Interface.MAX_TOURELLES - Interface.tourelles_joueur(Interface.moi()).length);
+	}
 	public static boolean hasTower(Position p) {
 		return (Interface.info_case(p) == CaseInfo.CASE_TOURELLE);
 	}
