@@ -65,13 +65,13 @@ public class BuildTowerObjective extends SpatialObjective {
 			Position closestTower = Map.getClosestTowerPosition(getTarget());
 			if (Map.distance(getTarget(), closestTower) > Interface.CONSTRUCTION_TOURELLE)  {
 				// Go ahead and ask to build the closest missing one
-				// TODO: but only build it if we can afford it (resource allocation)
+				// TODO: only build it if we can afford it (resource allocation)
 				Position[] path = Map.path(getTarget(), closestTower);
 				int towersNeeded = (path.length % Interface.CONSTRUCTION_TOURELLE);
 				if (path.length > 0 && towersNeeded < Map.possibleTowers()) {
 					Position current = getTarget();
 					int d = 0;
-					while (d < Interface.CONSTRUCTION_TOURELLE && d < path.length) {
+					while (d <= Interface.CONSTRUCTION_TOURELLE && d < path.length) {
 						current = path[path.length - d - 1];
 						d++;
 					}
