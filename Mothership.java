@@ -1,7 +1,9 @@
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 
 /**
@@ -17,6 +19,8 @@ public class Mothership {
 	protected Strategy strategy;
 	/** A list of all the agents */
 	protected List<Agent> agents;
+	/** @see #registerAgent(Agent, Objective) */
+	protected List<Entry<Agent, Objective>> waitingList;
 	/**
 	 * A list of every agent dedicated to each objective.
 	 * TODO: resource allocation system
@@ -29,6 +33,7 @@ public class Mothership {
 	private Mothership() {
 		// TODO: switch strategies during gameplay depending on adversaries' behavior
 		agents = new ArrayList<Agent>();
+		waitingList = new ArrayList<Entry<Agent, Objective>>();
 		efforts = new HashMap<Objective, List<Agent>>();
 		
 		setStrategy(new AloneStrategy());
@@ -50,7 +55,7 @@ public class Mothership {
 				// TODO: implement resource management
 				// TODO: better evaluate the quantity of effort going on
 				// The last objective of the strategy is the one we invest in when everything else is fine
-				if (i == l.size() - 1 || efforts.get(o).size() < 1) {
+				if (i == l.size() - 1 || efforts.get(o).size() < 1 && !o.isCompleted()) {
 					makeEffort(o);
 				}
 				
@@ -64,6 +69,9 @@ public class Mothership {
 			for (Agent a : agents) {
 				a.performAction(phase);
 			}
+			// Now, take into account the potential new agents that were added
+			// as a result of the other agents' actions
+			processWaitingList();
 			break;
 			
 		default:
@@ -78,7 +86,10 @@ public class Mothership {
 	 * @param o
 	 */
 	protected void makeEffort(Objective o) {
-		if (o instanceof BuildTowerObjective) {
+		if (o instanceof NoopObjective) {
+			return;
+		}
+		else if (o instanceof BuildTowerObjective) {
 			o.perform(Phase.BUILD, null);
 		}
 		else if (o instanceof DefendBaseObjective) {
@@ -141,11 +152,32 @@ public class Mothership {
 	}
 	
 	/**
+	 * Register this agent to add it at the end of the current iteration over agents.
+	 * Used to prevent ConcurrentModificationException
+	 * @see #addAgent(Agent, Objective)
+	 * @param agent
+	 * @param assignedTo
+	 */
+	public void registerAgent(Agent agent, Objective assignedTo) {
+		waitingList.add(new SimpleEntry<Agent, Objective>(agent, assignedTo));
+	}
+	
+	/**
+	 * Transfer the contents of the waiting list to the agents' & effort lists
+	 */
+	protected void processWaitingList() {
+		for (Entry<Agent, Objective> e : waitingList) {
+			addAgent(e.getKey(), e.getValue());
+		}
+		waitingList.clear();
+	}
+	
+	/**
 	 * 
 	 * @param agent
 	 * @param assignedTo Can be null
 	 */
-	public void addAgent(Agent agent, Objective assignedTo) {
+	protected void addAgent(Agent agent, Objective assignedTo) {
 		agents.add(agent);
 		if (assignedTo != null) {
 			agent.addCompulsoryObjective(assignedTo);

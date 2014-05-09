@@ -30,8 +30,9 @@ public class DefendObjective extends SpatialObjective {
 			if (phase == Phase.MOVE && (owner instanceof Sorcerers)) {
 				((Sorcerers)owner).moveClosestTo(getTarget());
 			}
-			else if (phase == Phase.BUILD) {
-				buildIfNecessary(owner);
+			else if (phase == Phase.BUILD && !askedForTowers) {
+				askedForTowers = true;
+				askToBuild(owner);
 			}
 		}
 		return true;
@@ -71,33 +72,26 @@ public class DefendObjective extends SpatialObjective {
 	}
 	
 	/**
-	 * If not done already, add new objectives that correspond to building towers around
+	 * Add new objectives that correspond to building towers around
 	 * the target in order to attain the required
 	 * TODO: check if the zone is safe enough
 	 * @param owner
-	 * @return Wether new objectives were placed
 	 */
-	protected boolean buildIfNecessary(Agent owner) {
-		if (!askedForTowers) {
-			askedForTowers = true;
-			Logger.log("Asking for towers to the owner");
-			List<Position> around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE);
-			// No need to build each towers, only a few are enough
-			for(int i = 0; i < around.size(); i += around.size()-1) {
-				Objective o = new BuildTowerObjective(around.get(i));
-				o.setPriority(getPriority());
-				owner.addObjective(o);
-			}
-			// Even try and go further away
-			around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE * 2);
-			Objective o = new BuildTowerObjective(around.get(around.size() / 2));
-			o.setPriority(getPriority() / 2f);
+	protected void askToBuild(Agent owner) {
+		List<Position> around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE);
+		// No need to build each towers, only a few are enough
+		for(int i = 0; i < around.size(); i += around.size()-1) {
+			Objective o = new BuildTowerObjective(around.get(i), this);
+			o.setPriority(getPriority());
 			owner.addObjective(o);
-			
-			// TODO: send more sorcerers if needed (how to do that?)
-			return true;
 		}
-		return false;
+		// Even try and go further away
+		around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE * 2);
+		Objective o = new BuildTowerObjective(around.get(around.size() / 2));
+		o.setPriority(getPriority() / 2f);
+		owner.addObjective(o);
+		
+		// TODO: send more sorcerers if needed (how to do that?)
 	}
 	
 	/*

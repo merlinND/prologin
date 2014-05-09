@@ -7,10 +7,11 @@ import java.util.List;
 public class AloneStrategy extends Strategy {
 
 	public AloneStrategy() {
+		Objective o;
 		// TODO: move to an end game strategy moment
-		Objective o = new DefendObjective(Map.ARTIFACT);
+		/*Objective o = new DefendObjective(Map.ARTIFACT);
 		o.setPriority(1f);
-		objectives.add(o);
+		objectives.add(o);*/
 
 		// Defend the base
 		o = new DefendBaseObjective();

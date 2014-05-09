@@ -9,14 +9,24 @@ public class BuildTowerObjective extends SpatialObjective {
 	/*
 	 * PROPERTIES
 	 */
-	
+	protected Objective parentObjective;
 	
 	/*
 	 * METHODS
 	 */
 	public BuildTowerObjective(Position target) {
-		super(target);
+		this(target, null);
 	}
+	/**
+	 * 
+	 * @param target
+	 * @param parentObjective The objective that asked to build this tower (can be null)
+	 */
+	public BuildTowerObjective(Position target, Objective parentObjective) {
+		super(target);
+		this.parentObjective = parentObjective;
+	}
+	
 	
 	@Override
 	public boolean perform(Phase phase, Agent owner) {
@@ -31,11 +41,12 @@ public class BuildTowerObjective extends SpatialObjective {
 					Tourelle t = Interface.tourelle_case(getTarget());
 					// The new tower will automatically defend its position
 					Tower tower = new Tower(t, getTarget());
-					Mothership.getInstance().addAgent(tower, this);
+					Mothership.getInstance().registerAgent(tower, parentObjective);
 					markCompleted();
 				}
 				else {
 					Logger.err("We were not able to build a tower on " + getTarget() + " because " + status, 2);
+					return false;
 				}
 			}
 			// If tower is not buildable right now
@@ -43,6 +54,7 @@ public class BuildTowerObjective extends SpatialObjective {
 			// TODO: build recursively so as to make possible
 			else {
 				Logger.err("We were not able to build a tower on " + getTarget(), 2);
+				return false;
 			}
 		}
 		

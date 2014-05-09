@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 
@@ -25,17 +26,30 @@ public abstract class Agent {
 	 */
 	public abstract void update();
 	
+	/**
+	 * Try and perform the first objective.
+	 * If it fails, move on to the next.
+	 * If it completes, remove it and move on to the next.
+	 * TODO: find a way to do more things while not conflicting?
+	 * @param phase
+	 */
 	public void performAction(Phase phase) {
-		// TODO: find a way to do more things while keeping everything possible
-		boolean isCompleted = false;
-		do {
-			Objective o = objectives.peek();
-			o.perform(phase, this);
-			isCompleted = o.isCompleted();
-			// Get rid of the completed objectives
-			if (isCompleted)
-				objectives.poll();
-		} while (isCompleted);
+		if (objectives.size() > 0) {
+			boolean failed = false, hasCompleted = false;
+			Object[] sorted = objectives.toArray();
+			Arrays.sort(sorted);
+			Logger.log("Going through " + sorted.length + " agent's " + this + " objectives");
+			int i = 0;
+			do {
+				Objective o = (Objective)sorted[i];
+				failed = o.perform(phase, this);
+				hasCompleted = o.isCompleted();
+				// Get rid of the completed objectives
+				if (hasCompleted)
+					objectives.remove(o);
+				i++;
+			} while (i < sorted.length && (failed || hasCompleted));
+		}
 	}
 	
 	/*
