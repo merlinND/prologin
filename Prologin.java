@@ -4,7 +4,7 @@ public class Prologin extends Interface {
 	// Fonction appelée au début de la partie
 	public void partie_debut() {
 		// Use to filter / disable output
-		Logger.setLogLevel(2);
+		Logger.setLogLevel(3);
 		Logger.log("===== Start of game =====", 1);
 
 		Map.base = Interface.base_joueur(moi());

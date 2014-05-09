@@ -6,12 +6,15 @@ public class DefendObjective extends SpatialObjective {
 	/*
 	 * PROPERTIES
 	 */
+	// TODO: replace by zone-safety notion
+	protected boolean askedForTowers;	
 	
 	/*
 	 * METHODS
 	 */
 	public DefendObjective(Position target) {
 		super(target);
+		askedForTowers = false;
 	}
 	
 	@Override
@@ -23,10 +26,12 @@ public class DefendObjective extends SpatialObjective {
 			}
 		}
 		// As a sorcerer : defending implies moving to the position and staying there
-		// TODO: eventually, build a tower to defend that same target (in construction phase)
-		else if (owner instanceof Sorcerers) {
-			if (phase == Phase.MOVE && owner.getPosition() != getTarget()) {
+		else {
+			if (phase == Phase.MOVE && (owner instanceof Sorcerers)) {
 				((Sorcerers)owner).moveClosestTo(getTarget());
+			}
+			else if (phase == Phase.BUILD) {
+				buildIfNecessary(owner);
 			}
 		}
 		return true;
@@ -63,6 +68,36 @@ public class DefendObjective extends SpatialObjective {
 		if (nShots > 0)
 			Logger.log("Shot a total of " + nShots + " arrows", 3);
 		return nShots;
+	}
+	
+	/**
+	 * If not done already, add new objectives that correspond to building towers around
+	 * the target in order to attain the required
+	 * TODO: check if the zone is safe enough
+	 * @param owner
+	 * @return Wether new objectives were placed
+	 */
+	protected boolean buildIfNecessary(Agent owner) {
+		if (!askedForTowers) {
+			askedForTowers = true;
+			Logger.log("Asking for towers to the owner");
+			List<Position> around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE);
+			// No need to build each towers, only a few are enough
+			for(int i = 0; i < around.size(); i += around.size()-1) {
+				Objective o = new BuildTowerObjective(around.get(i));
+				o.setPriority(getPriority());
+				owner.addObjective(o);
+			}
+			// Even try and go further away
+			around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE * 2);
+			Objective o = new BuildTowerObjective(around.get(around.size() / 2));
+			o.setPriority(getPriority() / 2f);
+			owner.addObjective(o);
+			
+			// TODO: send more sorcerers if needed (how to do that?)
+			return true;
+		}
+		return false;
 	}
 	
 	/*

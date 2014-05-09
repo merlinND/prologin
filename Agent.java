@@ -26,10 +26,16 @@ public abstract class Agent {
 	public abstract void update();
 	
 	public void performAction(Phase phase) {
-		Objective o = objectives.peek();
-		if (o != null)
+		// TODO: find a way to do more things while keeping everything possible
+		boolean isCompleted = false;
+		do {
+			Objective o = objectives.peek();
 			o.perform(phase, this);
-		// TODO: clear completed objectives
+			isCompleted = o.isCompleted();
+			// Get rid of the completed objectives
+			if (isCompleted)
+				objectives.poll();
+		} while (isCompleted);
 	}
 	
 	/*

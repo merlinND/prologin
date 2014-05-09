@@ -9,6 +9,7 @@ public abstract class Objective implements Comparable<Objective> {
 	 */
 	public static final float MAX_PRIORITY = 1000000;
 	protected float priority;
+	protected boolean completed;
 	
 	/*
 	 * METHODS
@@ -33,4 +34,17 @@ public abstract class Objective implements Comparable<Objective> {
 		this.priority = priority;
 	}
 	
+	public boolean isCompleted() {
+		return completed;
+	}
+	/**
+	 * Set this objective to completed, which will cause it
+	 * to be removed from its owner's objectives.
+	 */
+	public void markCompleted() {
+		setCompleted(true);
+	}
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
 }

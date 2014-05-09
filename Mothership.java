@@ -44,23 +44,26 @@ public class Mothership {
 			// TODO: make sure we're using the right priority
 			List<Objective> l = strategy.getObjectives();
 			int i = 0;
-			while (i < l.size() && getResources() > 0) {
+			while (i < l.size()) {
 				Objective o = l.get(i);
+				//  while getResources() > 0
+				// TODO: implement resource management
 				// TODO: better evaluate the quantity of effort going on
-				// The last effort of the strategy is the one we invest in when everything else is fine
+				// The last objective of the strategy is the one we invest in when everything else is fine
 				if (i == l.size() - 1 || efforts.get(o).size() < 1) {
 					makeEffort(o);
 				}
 				
 				i++;
 			}
-			break;
+			// No break: intentional!
 			
 		case MOVE:
 		case SHOOT:
 		case SIEGE:
-			for (Agent a : agents)
-				a.performAction(phase);		
+			for (Agent a : agents) {
+				a.performAction(phase);
+			}
 			break;
 			
 		default:
@@ -77,6 +80,9 @@ public class Mothership {
 	protected void makeEffort(Objective o) {
 		if (o instanceof BuildTowerObjective) {
 			o.perform(Phase.BUILD, null);
+		}
+		else if (o instanceof DefendBaseObjective) {
+			addAgent(new HomeAgent(Map.base), o);
 		}
 		else {
 			int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
