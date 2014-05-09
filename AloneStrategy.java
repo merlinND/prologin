@@ -25,13 +25,19 @@ public class AloneStrategy extends Strategy {
 		o.setPriority(0.5f);
 		objectives.add(o);
 		
-		// TODO: build defense towers further around (otherwise some of the range is wasted)
-		List<Position> around = Map.getNeighbors(Map.base);
-		for (Position p : around) {
-			o = new BuildTowerObjective(p);
+		// We build defense towers further around the base (otherwise some of the range is wasted)
+		List<Position> around = Map.getNeighbors(Map.base, Interface.PORTEE_TOURELLE);
+		// No need to build each towers, only a few are enough
+		for(int i = 1; i < around.size(); i += 2) {
+			o = new BuildTowerObjective(around.get(i));
 			o.setPriority(0.1f);
 			objectives.add(o);
 		}
+		around = Map.getNeighbors(Map.base, Interface.PORTEE_TOURELLE * 2);
+		o = new BuildTowerObjective(around.get(around.size() / 2));
+		o.setPriority(0.1f);
+		objectives.add(o);
+		
 		// When everything else is taken care of, protect the base by spamming sorcerers
 		o = new DefendObjective(Map.base);
 		o.setPriority(0f);

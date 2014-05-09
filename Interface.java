@@ -43,21 +43,6 @@ class Position {
 		this.y = y;
 	}
 	
-	@Override
-	public String toString() {
-		return "(" + x + ", " + y + ")";
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Position))
-			return false;
-		else {
-			Position other = (Position)obj;
-			return (this.x == other.x && this.y == other.y);
-		}
-	}
-	
 	public boolean isValid() {
 		return (x >= 0
 				&& y >= 0
@@ -76,6 +61,26 @@ class Position {
 	}
 	public Position down() {
 		return new Position(x, y + 1);
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Position))
+			return false;
+		else {
+			Position other = (Position)obj;
+			return (this.x == other.x && this.y == other.y);
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
 	}
 }
 

@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -78,10 +81,21 @@ public class Map {
 	
 	/**
 	 * Get a list of the **walkable** squares adjacent to `p`
+	 * @see #getNeighbors(Position, boolean)
 	 * @param p
-	 * @return 
+	 * @return
 	 */
 	public static List<Position> getNeighbors(Position p) {
+		return getNeighbors(p, true);
+	}
+	
+	/**
+	 * Get a list of the squares adjacent to `p`
+	 * @param p
+	 * @param checkWalkable If we should make sure that the returned positions are all walkable
+	 * @return 
+	 */
+	public static List<Position> getNeighbors(Position p, boolean checkWalkable) {
 		List<Position> result = new ArrayList<Position>();
 		result.add(p.left());
 		result.add(p.right());
@@ -91,9 +105,42 @@ public class Map {
 		Iterator<Position> it = result.iterator();
 		while (it.hasNext()) {
 			Position candidate = it.next();
-			if (!candidate.isValid() || !isWalkable(candidate))
+			if (!candidate.isValid() || (checkWalkable && !isWalkable(candidate)))
 				it.remove();
 		}
+		return result;
+	}
+	
+	/**
+	 * Get a list of the **walkable** squares at a distance `distance` from `p`
+	 * @param p
+	 * @param distance
+	 * @return 
+	 */
+	public static List<Position> getNeighbors(Position p, int distance) {
+		List<Position> result = new ArrayList<Position>();
+		HashMap<Position, Boolean> visited = new HashMap<Position, Boolean>();
+		
+		Queue<Position> queue = new LinkedList<Position>();
+		queue.add(p);
+		visited.put(p, true);
+		while (!queue.isEmpty()) {
+			Position current = queue.poll();
+			List<Position> adj = getNeighbors(current, false);
+
+			for (Position neighbor : adj) {
+				int d = distance(p, neighbor);
+				if (d <= distance && !visited.containsKey(neighbor)) {
+					System.out.println("Considering the new position " + neighbor + " distance " + d);
+					visited.put(neighbor, true);
+					if (d < distance)
+						queue.add(neighbor);
+					else if (d == distance)
+						result.add(neighbor);
+				}
+			}
+		}
+		
 		return result;
 	}
 	
