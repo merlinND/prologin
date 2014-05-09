@@ -2,7 +2,7 @@ import java.util.List;
 
 /**
  * Basic strategy: completely ignore that there might be other players.
- * @author mnimierdavi
+ * @author Merlin Nimier-David
  */
 public class AloneStrategy extends Strategy {
 

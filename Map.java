@@ -6,7 +6,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Position of the objectives around the map
- * @author mnimierdavi
+ * @author Merlin Nimier-David
  */
 public class Map {
 	public static final Position 

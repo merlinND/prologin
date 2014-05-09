@@ -2,7 +2,7 @@
 /**
  * Build a tower at the desired place.
  * If needed, move closer to it.
- * @author mnimierdavi
+ * @author Merlin Nimier-David
  *
  */
 public class BuildTowerObjective extends SpatialObjective {
@@ -24,7 +24,7 @@ public class BuildTowerObjective extends SpatialObjective {
 		
 		// If we can build right now, do it
 		if (phase == Phase.BUILD) {
-			if (Map.canBuild(getTarget())) {
+			if (canBuild(getTarget())) {
 				// TODO: support larger tower range
 				Erreur status = Interface.construire(getTarget(), Interface.PORTEE_TOURELLE);
 				if (status == Erreur.OK) {
@@ -45,6 +45,11 @@ public class BuildTowerObjective extends SpatialObjective {
 		}
 		
 		return true;
+	}
+	
+	protected boolean canBuild(Position p) {
+		int n = Interface.tourelles_joueur(Interface.moi()).length;
+		return (Map.canBuild(getTarget()) && (n < Interface.MAX_TOURELLES));
 	}
 	
 	/*

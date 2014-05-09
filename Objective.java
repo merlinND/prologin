@@ -1,7 +1,7 @@
 
 /**
  * 
- * @author mnimierdavi
+ * @author Merlin Nimier-David
  */
 public abstract class Objective implements Comparable<Objective> {
 	/*

@@ -1,6 +1,6 @@
 /**
  * An objective which implies a spatial target
- * @author mnimierdavi
+ * @author Merlin Nimier-David
  *
  */
 public abstract class SpatialObjective extends Objective {

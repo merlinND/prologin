@@ -118,6 +118,12 @@ public class Interface {
 
 	// Coût exponentiel pour chaque case de portée supplémentaire
 	public static final int COUT_PORTEE = 4;
+	
+	// Nombre maximal de tourelles à construire
+	public static final int MAX_TOURELLES = 9;
+	
+	// Portée maximale possible pour une tourelle
+	public static final int MAX_PORTEE = 7;
 
 	// Nombre maximum de cases qu'un sorcier peut franchir à chaque tour.
 	public static final int PORTEE_SORCIER = 4;
