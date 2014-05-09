@@ -7,18 +7,15 @@ import java.util.List;
 public class AloneStrategy extends Strategy {
 
 	public AloneStrategy() {
-		Objective o;
-		// TODO: move to an end game strategy moment
-		/*Objective o = new DefendObjective(Map.ARTIFACT);
-		o.setPriority(1f);
-		objectives.add(o);*/
-
-		// Defend the base
-		o = new DefendBaseObjective();
-		o.setPriority(0.8f);
-		objectives.add(o);
+		// ----- Begin part
+		// Empty
 		
-		// TODO: make the closer fountains more prioritary
+		// ----- Run part
+		// Take all interesting points
+		List<Objective> run = objectives.get(Part.RUN);
+		Objective o;
+		
+		// The closer fountains are more important
 		Position[] fountains = {
 			Map.FOUNTAIN_N,
 			Map.FOUNTAIN_E,
@@ -37,22 +34,23 @@ public class AloneStrategy extends Strategy {
 			
 			o = new DefendObjective(f);
 			o.setPriority(priority);
-			objectives.add(o);
+			run.add(o);
 		}
+		// Take the artifact
+		o = new DefendObjective(Map.ARTIFACT);
+		o.setPriority(1f);
+		run.add(o);
 		
-		// When everything else is taken care of, just stash money
-		o = new NoopObjective();
-		o.setPriority(0f);
-		objectives.add(o);
+		// ----- Idle part
+		objectives.get(Part.IDLE).add(new NoopObjective());
 		
-		// TODO: game "moment" based strategies
-		
-		// TODO: normalize all objectives' priority (sum = 1) to help resource management
-	}
-	
-	@Override
-	public List<Objective> getObjectives() {
-		return objectives;
+		// ----- Final part
+		// Empty
 	}
 
+	@Override
+	protected boolean goToEnd(int roundCount) {
+		// This strategy doesn't have an end part
+		return false;
+	}
 }

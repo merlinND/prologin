@@ -17,9 +17,10 @@ public abstract class Objective implements Comparable<Objective> {
 	 * METHODS
 	 */
 	public Objective() {
-		
+		this(null);
 	}
 	public Objective(Objective parentObjective) {
+		this.priority = 0f;
 		this.parentObjective = parentObjective;
 	}
 	

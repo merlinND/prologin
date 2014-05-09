@@ -42,7 +42,7 @@ public class Mothership {
 	public void play(Phase phase) {
 		switch (phase) {
 		case BUILD:
-			// Update (sync agents <=> game state)
+			// Update (update strategy, sync agents <=> game state)
 			update();
 			
 			// Go through the objectives and assign as much effort as needed
@@ -54,13 +54,17 @@ public class Mothership {
 				//  while getResources() > 0
 				// TODO: implement resource management
 				// TODO: better evaluate the quantity of effort going on
-				// The last objective of the strategy is the one we invest in when everything else is fine
-				if (i == l.size() - 1 || efforts.get(o).size() < 1 && !o.isCompleted()) {
+				if (efforts.get(o).size() < 1 && !o.isCompleted()) {
 					makeEffort(o);
 				}
 				
 				i++;
 			}
+			// The "idle" objective of the strategy is the one we invest in when everything else is fine
+			for (Objective o : strategy.getIdleObjectives()) {
+				makeEffort(o);
+			}
+			
 			// No break: intentional!
 			
 		case MOVE:
@@ -105,11 +109,14 @@ public class Mothership {
 	}
 	
 	/**
-	 * Sync the agents with the game state
+	 * Update the strategy.
+	 * Sync the agents with the game state.
 	 * TODO: update each agent
 	 * TODO: remove the dead agents
 	 */
 	public void update() {
+		strategy.update(Interface.tour_actuel());
+		
 		Iterator<Agent> it = agents.iterator();
 		while(it.hasNext()) {
 			Agent a = it.next();
@@ -145,8 +152,15 @@ public class Mothership {
 	
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
+		resetObjectives();
+	}
+	
+	public void resetObjectives() {
 		// TODO: how to reassign the existing agents?
 		efforts.clear();
+		for (Entry<Agent, Objective> e : waitingList)
+			e.setValue(null);
+		
 		for (Objective o : strategy.getObjectives())
 			efforts.put(o, new ArrayList<Agent>());
 	}
