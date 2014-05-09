@@ -14,9 +14,9 @@ public class AloneStrategy extends Strategy {
 		objectives.add(o);*/
 
 		// Defend the base
-		o = new DefendBaseObjective();
+		/*o = new DefendBaseObjective();
 		o.setPriority(0.8f);
-		objectives.add(o);
+		objectives.add(o);*/
 		
 		// TODO: make the closer fountains more prioritary
 		Position[] fountains = {

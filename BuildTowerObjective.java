@@ -50,7 +50,7 @@ public class BuildTowerObjective extends SpatialObjective {
 			
 			// ----- If tower is not buildable right now
 			// If it is because the spot is full, try and find an adjacent one
-			if (Map.hasTower(getTarget())) {
+			if (!Map.isBuildable(getTarget())) {
 				for (Position p : Map.getNeighbors(getTarget())) {
 					if (canBuild(p)) {
 						Logger.log("Couldn't build on " + getTarget() + ", we will try on " + p);
@@ -67,7 +67,7 @@ public class BuildTowerObjective extends SpatialObjective {
 				// Go ahead and ask to build the closest missing one
 				// TODO: only build it if we can afford it (resource allocation)
 				Position[] path = Map.path(getTarget(), closestTower);
-				int towersNeeded = (path.length % Interface.CONSTRUCTION_TOURELLE);
+				int towersNeeded = (path.length / Interface.CONSTRUCTION_TOURELLE);
 				if (path.length > 0 && towersNeeded < Map.possibleTowers()) {
 					Position current = getTarget();
 					int d = 0;

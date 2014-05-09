@@ -46,10 +46,10 @@ public class Sorcerers extends Agent {
 		Position[] steps = Map.path(getPosition(), target);
 		// The farthest step attainable is at most PORTEE_SORCIER away
 		int distance = 0;
-		while (distance < Interface.PORTEE_SORCIER && distance < steps.length)
+		while (distance <= Interface.PORTEE_SORCIER && distance < steps.length)
 			destination = steps[distance++];
 		
-		Logger.log("Moving from " + getPosition() + " to " + destination + "(" + (distance-1) + " away)", 3);
+		Logger.log("Moving from " + getPosition() + " to " + destination + "(" + (distance-1) + " away)", 4);
 		Erreur status = Interface.deplacer(getPosition(), destination, getSize());
 		// TODO: handle errors, we could lose agents !
 		if (status == Erreur.OK)

@@ -52,6 +52,7 @@ public class Map {
 		return (Interface.info_case(p) == CaseInfo.CASE_TOURELLE);
 	}
 	
+	
 	/**
 	 * Find **our** closest tower near `from`.
 	 * The base is considered as a tower, since it provides the base point
@@ -110,6 +111,14 @@ public class Map {
 			return false;
 		}
 	}
+	/**
+	 * @warning We ignore passing sorcerers!
+	 * @param p
+	 * @return
+	 */
+	public static boolean isBuildable(Position p) {
+		return (Interface.info_case(p) == CaseInfo.CASE_SIMPLE);
+	}
 	
 	/**
 	 * Check if a **walkable** square contains a danger.
@@ -141,17 +150,20 @@ public class Map {
 			seen.add(to);
 			q.add(to);
 			Position current = to;
+			// Try to alternate movement
+			int offset = 0;
 			while (!q.isEmpty() && !current.equals(from)) {
 				current = q.poll();
 				List<Position> adj = getNeighbors(current);
-				// TODO: prioritize alternating movements (=> will create diagonals)
-				for (Position p : adj) {
+				for (int i = 0; i < adj.size(); ++i) {
+					Position p = adj.get((i + offset) % adj.size());
 					if (!seen.contains(p)) {
 						seen.add(p);
 						parents.put(p, current);
 						q.add(p);
 					}
 				}
+				offset ++;
 			}
 			
 			// If we've reached the target, rewind to gather the steps
@@ -198,9 +210,9 @@ public class Map {
 	public static List<Position> getNeighbors(Position p, boolean checkWalkable) {
 		List<Position> result = new ArrayList<Position>();
 		result.add(p.left());
-		result.add(p.right());
 		result.add(p.up());
 		result.add(p.down());
+		result.add(p.right());
 		
 		Iterator<Position> it = result.iterator();
 		while (it.hasNext()) {
