@@ -9,7 +9,7 @@ public class BuildTowerObjective extends SpatialObjective {
 	/*
 	 * PROPERTIES
 	 */
-	protected Objective parentObjective;
+	
 	
 	/*
 	 * METHODS
@@ -23,39 +23,34 @@ public class BuildTowerObjective extends SpatialObjective {
 	 * @param parentObjective The objective that asked to build this tower (can be null)
 	 */
 	public BuildTowerObjective(Position target, Objective parentObjective) {
-		super(target);
-		this.parentObjective = parentObjective;
+		super(target, parentObjective);
 	}
 	
 	@Override
 	public boolean perform(Phase phase, Agent owner) {
 		
-		// If we can build right now, do it
 		if (phase == Phase.BUILD) {
 			Logger.log("Trying to build tower on " + getTarget(), 3);
+			// ----- If we can build right now, try and do it
 			if (canBuild(getTarget())) {
 				// TODO: support larger tower range (when more defensive capacity is needed?)
 				Erreur status = Interface.construire(getTarget(), Interface.PORTEE_TOURELLE);
-				if (status == Erreur.OK) {
-					Tourelle t = Interface.tourelle_case(getTarget());
-					// The new tower will automatically defend its position
-					Tower tower = new Tower(t, getTarget());
-					Mothership.getInstance().registerAgent(tower, parentObjective);
-					markCompleted();
-				}
-				else {
+				if (status != Erreur.OK) {
 					Logger.err("We were not able to build a tower on " + getTarget() + " because " + status, 2);
 					return false;
 				}
+				
+				Tourelle t = Interface.tourelle_case(getTarget());
+				// The new tower will automatically defend its position
+				Tower tower = new Tower(t, getTarget());
+				Mothership.getInstance().registerAgent(tower, parentObjective);
+				markCompleted();
+				return true;
 			}
-			// If tower is not buildable right now
-			// If it requires another tower (build range error),
-			// go ahead and try to build it
-			else if (false) {
-				// TODO: build recursively so as to make it possible
-			}
-			// If the spot is full, try and find an adjacent one
-			else if (Map.hasTower(getTarget())) {
+			
+			// ----- If tower is not buildable right now
+			// If it is because the spot is full, try and find an adjacent one
+			if (Map.hasTower(getTarget())) {
 				for (Position p : Map.getNeighbors(getTarget())) {
 					if (canBuild(p)) {
 						Logger.log("Couldn't build on " + getTarget() + ", we will try on " + p);
@@ -63,14 +58,41 @@ public class BuildTowerObjective extends SpatialObjective {
 						break;
 					}
 				}
-			}
-			else {
-				Logger.err("We were not able to build a tower on " + getTarget(), 2);
 				return false;
 			}
+			
+			// If it is because it requires another tower (build range error),
+			Position closestTower = Map.getClosestTowerPosition(getTarget());
+			if (Map.distance(getTarget(), closestTower) > Interface.CONSTRUCTION_TOURELLE)  {
+				// Go ahead and ask to build the closest missing one
+				Position[] path = Interface.chemin(getTarget(), closestTower);
+				if (path.length > 0) {
+					Position current = getTarget();
+					int d = 0;
+					while (d < Interface.CONSTRUCTION_TOURELLE && d < path.length) {
+						current = path[path.length - d - 1];
+						d++;
+					}
+					// Ask for it to be built
+					// TODO: figure out a way for this (future) new agent to be registered with the Mothership as participating towards the right goal
+					Objective intermediate = new BuildTowerObjective(current, getRootObjective());
+					intermediate.setPriority(getPriority() * 1.01f);
+					owner.addObjective(intermediate);
+				}
+				else {
+					Logger.err("We won't be able to build a tower on " + getTarget() + " because we won't ever attain it", 2);
+					markCompleted();
+				}
+				return false;
+			}
+
+			Logger.err("For some reasons, we were not able to build a tower on " + getTarget(), 2);
+			return false;
 		}
-		
-		return true;
+		// During the other phases, nothing to do
+		else {
+			return true;
+		}
 	}
 	
 	protected boolean canBuild(Position p) {
@@ -85,5 +107,4 @@ public class BuildTowerObjective extends SpatialObjective {
 	public String toString() {
 		return "Objective[Build tower on " + getTarget() + "]";
 	}
-
 }

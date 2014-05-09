@@ -43,6 +43,26 @@ public class Map {
 		return (Interface.info_case(p) == CaseInfo.CASE_TOURELLE);
 	}
 	
+	/**
+	 * Find **our** closest tower near `from`.
+	 * The base is considered as a tower, since it provides the base point
+	 * for new tower construction.
+	 * @param from
+	 * @return
+	 */
+	public static Position getClosestTowerPosition(Position from) {
+		Position result = Map.base;
+		int minDistance = distance(from, result);
+		for (Tourelle t : Interface.tourelles_joueur(Interface.moi())) {
+			int d = distance(from, t.pos);
+			if (d < minDistance) {
+				minDistance = d;
+				result = t.pos;
+			}
+		}
+		return result;
+	}
+	
 	/*
 	 * HELPER FUNCTIONS
 	 */

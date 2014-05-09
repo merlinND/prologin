@@ -54,6 +54,10 @@ public abstract class Agent {
 	/*
 	 * GETTERS & SETTERS
 	 */
+	/**
+	 * TODO: make sure that the most recent objectives (with same priority) are handled first
+	 * @param objective
+	 */
 	public void addObjective(Objective objective) {
 		objectives.add(objective);
 	}

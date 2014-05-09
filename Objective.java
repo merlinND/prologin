@@ -11,11 +11,16 @@ public abstract class Objective implements Comparable<Objective> {
 	protected float priority;
 	protected boolean completed;
 	
+	protected Objective parentObjective;
+	
 	/*
 	 * METHODS
 	 */
 	public Objective() {
 		
+	}
+	public Objective(Objective parentObjective) {
+		this.parentObjective = parentObjective;
 	}
 	
 	public abstract boolean perform(Phase phase, Agent owner);
@@ -46,5 +51,15 @@ public abstract class Objective implements Comparable<Objective> {
 	}
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
+	}
+	
+	private Objective getParentObjective() {
+		return this.parentObjective;
+	}
+	public Objective getRootObjective() {
+		Objective current = this;
+		while (current.getParentObjective() != null)
+			current = current.getParentObjective();
+		return current;
 	}
 }

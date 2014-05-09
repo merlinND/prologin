@@ -13,6 +13,10 @@ public abstract class SpatialObjective extends Objective {
 	 * METHODS
 	 */
 	public SpatialObjective(Position target) {
+		this(target, null);
+	}
+	public SpatialObjective(Position target, Objective parentObjective) {
+		super(parentObjective);
 		this.target = target;
 	}
 	

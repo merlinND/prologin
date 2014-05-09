@@ -13,7 +13,10 @@ public class DefendObjective extends SpatialObjective {
 	 * METHODS
 	 */
 	public DefendObjective(Position target) {
-		super(target);
+		this(target, null);
+	}
+	public DefendObjective(Position target, Objective parentObjective) {
+		super(target, parentObjective);
 		askedForTowers = false;
 	}
 	
@@ -81,7 +84,7 @@ public class DefendObjective extends SpatialObjective {
 		List<Position> around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE);
 		// No need to build each towers, only a few are enough
 		for(int i = 0; i < around.size(); i += around.size()-1) {
-			Objective o = new BuildTowerObjective(around.get(i), this);
+			Objective o = new BuildTowerObjective(around.get(i), getRootObjective());
 			o.setPriority(getPriority());
 			owner.addObjective(o);
 		}
