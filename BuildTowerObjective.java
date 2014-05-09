@@ -44,6 +44,7 @@ public class BuildTowerObjective extends SpatialObjective {
 				Tower tower = new Tower(t, getTarget());
 				Mothership.getInstance().registerAgent(tower, parentObjective);
 				markCompleted();
+				addSpending(Interface.COUT_TOURELLE);
 				return true;
 			}
 			

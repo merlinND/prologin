@@ -1,3 +1,5 @@
+import java.util.List;
+
 
 
 /**
@@ -21,9 +23,28 @@ public class DefendBaseObjective extends DefendObjective {
 	}
 	
 	@Override
-	public boolean isCompleted() {
-		// TODO Assess wether base is safe
-		return super.isCompleted();
+	public boolean isSatisfied() {
+		// TODO Assess if the base is safe
+		return super.isSatisfied();
+	}
+	
+	protected void askToBuild(Agent owner) {
+		List<Position> around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE);
+		// No need to build each towers, only a few are enough
+		for(int i = 0; i < around.size(); i += around.size()-1) {
+			Objective o = new BuildTowerObjective(around.get(i), getRootObjective());
+			o.setPriority(getPriority());
+			owner.addObjective(o);
+		}
+		// Even try and go further away
+		around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE * 2);
+		for(int i = 0; i < around.size(); i += 2) {
+			Objective o = new BuildTowerObjective(around.get(i), getRootObjective());
+			o.setPriority(getPriority() / 2f);
+			owner.addObjective(o);
+		}
+		
+		// TODO: send more sorcerers if needed (how to do that?)
 	}
 	
 	@Override

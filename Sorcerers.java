@@ -28,6 +28,7 @@ public class Sorcerers extends Agent {
 	
 	@Override
 	public void update() {
+		// TODO: actually, when several sorcerers Agent are on the same spot, is this correct?
 		int n = Interface.nb_sorciers(getPosition(), Interface.moi());
 		if (n <= 0) {
 			Logger.log("The sorcerers who were on " + getPosition() + " were all killed.", 3);

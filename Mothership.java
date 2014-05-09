@@ -93,15 +93,17 @@ public class Mothership {
 			return;
 		}
 		else if (o instanceof BuildTowerObjective) {
-			o.perform(Phase.BUILD, null);
+			if (o.canSpendMore())
+				o.perform(Phase.BUILD, null);
 		}
 		else if (o instanceof DefendBaseObjective) {
 			addAgent(new HomeAgent(Map.base), o);
 		}
 		else if (o instanceof OccupyObjective){
 			int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
-			if (n > 0) {
+			if (n > 0 && o.canSpendMore()) {
 				Sorcerers s = new Sorcerers(n);
+				o.addSpending(n * Interface.COUT_SORCIER);
 				addAgent(s, o);
 			}
 		}

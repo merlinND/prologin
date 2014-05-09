@@ -10,6 +10,8 @@ public abstract class Objective implements Comparable<Objective> {
 	public static final float MAX_PRIORITY = 1000000;
 	protected float priority;
 	protected boolean completed;
+	public static final int DEFAULT_SPENDING_LIMIT = -1;
+	protected int spendingLimit, spent;
 	
 	protected Objective parentObjective;
 	
@@ -22,6 +24,9 @@ public abstract class Objective implements Comparable<Objective> {
 	public Objective(Objective parentObjective) {
 		this.priority = 0f;
 		this.parentObjective = parentObjective;
+		
+		this.spendingLimit = DEFAULT_SPENDING_LIMIT;
+		this.spent = 0;
 	}
 	
 	public abstract boolean perform(Phase phase, Agent owner);
@@ -38,6 +43,16 @@ public abstract class Objective implements Comparable<Objective> {
 	}
 	public void setPriority(float priority) {
 		this.priority = priority;
+	}
+	
+	public void setSpendingLimit(int spendingLimit) {
+		this.spendingLimit = spendingLimit;
+	}
+	public void addSpending(int spent) {
+		this.spent += spent;
+	}
+	public boolean canSpendMore() {
+		return (this.spendingLimit < 0) || (this.spent < this.spendingLimit);
 	}
 	
 	/**

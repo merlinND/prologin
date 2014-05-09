@@ -25,7 +25,8 @@ public class BalancedStrategy extends Strategy {
 			Map.FOUNTAIN_W
 		};
 		int maxFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_E),
-			minFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_N);
+			minFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_N),
+			maxFountainSpending = 800; //...times 2
 		float closeFountainPriority = 0.5f,
 			  farFountainPriority = 0.1f;
 		for (Position f : fountains) {
@@ -34,8 +35,9 @@ public class BalancedStrategy extends Strategy {
 			priority = (1 - priority) * (closeFountainPriority - farFountainPriority);
 			priority += farFountainPriority;
 			
-			o = new DefendObjective(f);
+			o = new OccupyObjective(f);
 			o.setPriority(priority);
+			o.setSpendingLimit((int)(maxFountainSpending * priority));
 			run.add(o);
 		}
 		
@@ -57,7 +59,7 @@ public class BalancedStrategy extends Strategy {
 	
 	@Override
 	protected boolean goToEnd(int roundCount) {
-		return (roundCount >= 15); //(Interface.MAX_TOUR - 10));
+		return (roundCount >= (Interface.MAX_TOUR - 10));
 	}
 
 }

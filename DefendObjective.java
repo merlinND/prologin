@@ -88,13 +88,6 @@ public class DefendObjective extends SpatialObjective {
 			o.setPriority(getPriority());
 			owner.addObjective(o);
 		}
-		// Even try and go further away
-		around = Map.getNeighborsEdge(getTarget(), Interface.PORTEE_TOURELLE * 2);
-		Objective o = new BuildTowerObjective(around.get(around.size() / 2));
-		o.setPriority(getPriority() / 2f);
-		owner.addObjective(o);
-		
-		// TODO: send more sorcerers if needed (how to do that?)
 	}
 	
 	/*
