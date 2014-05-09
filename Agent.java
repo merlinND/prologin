@@ -7,12 +7,14 @@ public abstract class Agent {
 	 */
 	protected Position position;
 	protected PriorityQueue<Objective> objectives;
+	protected boolean dead;
 	
 	/*
 	 * METHODS
 	 */
 	public Agent(Position position) {
 		this.position = position;
+		this.dead = false;
 		objectives = new PriorityQueue<Objective>();
 	}
 
@@ -52,6 +54,13 @@ public abstract class Agent {
 	}
 	public void setObjectives(PriorityQueue<Objective> objectives) {
 		this.objectives = objectives;
+	}
+	
+	public boolean isDead() {
+		return dead;
+	}
+	public void markDead() {
+		this.dead = true;
 	}
 	
 }

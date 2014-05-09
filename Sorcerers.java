@@ -27,7 +27,14 @@ public class Sorcerers extends Agent {
 	
 	@Override
 	public void update() {	
-		// TODO
+		int n = Interface.nb_sorciers(getPosition(), Interface.moi());
+		if (n <= 0) {
+			System.out.println("The sorcerers who were on " + getPosition() + " were all killed.");
+			markDead();
+		}
+		else {
+			this.size = n;
+		}
 	}
 	
 	public void moveClosestTo(Position target) {

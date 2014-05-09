@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 /**
@@ -91,7 +90,26 @@ public class Mothership {
 	 * TODO: remove the dead agents
 	 */
 	public void update() {
-		
+		Iterator<Agent> it = agents.iterator();
+		while(it.hasNext()) {
+			Agent a = it.next();
+			a.update();
+			if (a.isDead()) {
+				it.remove();
+			}
+		}
+	}
+	
+	public void cleanBodies() {
+		Iterator<Agent> it = agents.iterator();
+		while(it.hasNext()) {
+			Agent a = it.next();
+			if (a.isDead()) {
+				it.remove();
+				for (List<Agent> l : efforts.values())
+					l.remove(a);
+			}
+		}
 	}
 	
 	/*
@@ -119,9 +137,14 @@ public class Mothership {
 			efforts.get(assignedTo).add(agent);
 		}
 	}
+	/**
+	 * Remove the agent corresponding to this iterator from all lists.
+	 * @param it
+	 */
 	public void removeAgent(Agent agent) {
-		// TODO: remove agent from **all** lists (efforts)
-		throw new NotImplementedException();
+		agents.remove(agent);
+		for (List<Agent> l : efforts.values())
+			l.remove(agent);
 	}
 	
 	/**

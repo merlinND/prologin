@@ -28,8 +28,9 @@ public class BuildTowerObjective extends SpatialObjective {
 				// TODO: support larger tower range
 				Erreur status = Interface.construire(getTarget(), Interface.PORTEE_TOURELLE);
 				if (status == Erreur.OK) {
+					Tourelle t = Interface.tourelle_case(getTarget());
 					// The new tower will automatically defend its position
-					Tower tower = new Tower(getTarget());
+					Tower tower = new Tower(t, getTarget());
 					Mothership.getInstance().addAgent(tower, this);
 				}
 				else {

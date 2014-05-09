@@ -8,6 +8,10 @@ public class Tower extends Agent {
 	 * This position is used to choose in which order to attack nearby enemies.
 	 */
 	protected Position target = null;
+	/**
+	 * The data structure representing the tower in the game.
+	 */
+	protected Tourelle tower = null;
 	
 	/*
 	 * METHODS
@@ -15,14 +19,22 @@ public class Tower extends Agent {
 	/**
 	 * By default, a tower defends its own position
 	 */
-	public Tower(Position position) {
+	public Tower(Tourelle tower, Position position) {
 		super(position);
+		this.tower = tower;
 		addObjective(new DefendObjective(getPosition()));
 	}
 	
 	@Override
 	public void update() {
-		// TODO Check if dead
+		Tourelle t = Interface.tourelle_case(getPosition());
+		if (t.vie <= 0) {
+			System.out.println("The tower which was on " + getPosition() + " was destroyed.");
+			markDead();
+		}
+		else {
+			this.tower = t;
+		}
 	}
 	
 	/**
