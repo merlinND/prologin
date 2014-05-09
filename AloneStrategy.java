@@ -26,14 +26,14 @@ public class AloneStrategy extends Strategy {
 		objectives.add(o);
 		
 		// We build defense towers further around the base (otherwise some of the range is wasted)
-		List<Position> around = Map.getNeighbors(Map.base, Interface.PORTEE_TOURELLE);
+		List<Position> around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE);
 		// No need to build each towers, only a few are enough
-		for(int i = 1; i < around.size(); i += 2) {
+		for(int i = 0; i < around.size(); i += around.size()-1) {
 			o = new BuildTowerObjective(around.get(i));
 			o.setPriority(0.1f);
 			objectives.add(o);
 		}
-		around = Map.getNeighbors(Map.base, Interface.PORTEE_TOURELLE * 2);
+		around = Map.getNeighborsEdge(Map.base, Interface.PORTEE_TOURELLE * 2);
 		o = new BuildTowerObjective(around.get(around.size() / 2));
 		o.setPriority(0.1f);
 		objectives.add(o);

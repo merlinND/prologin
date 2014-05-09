@@ -117,7 +117,29 @@ public class Map {
 	 * @param distance
 	 * @return 
 	 */
+	public static List<Position> getNeighborsEdge(Position p, int distance) {
+		return getNeighbors(p, distance, true);
+	}
+	
+	/**
+	 * Get a list of the all the **walkable** squares at a distance 1 to `distance` from `p`
+	 * @see #getNeighbors(Position, int, boolean)
+	 * @param p
+	 * @param distance
+	 * @return
+	 */
 	public static List<Position> getNeighbors(Position p, int distance) {
+		return getNeighbors(p, distance, false);
+	}
+	
+	/**
+	 * Get a list of the all the **walkable** squares at a distance 1 to `distance` from `p`
+	 * @param p
+	 * @param distance
+	 * @param edgeOnly Discard every square that is not exactly `distance` away
+	 * @return
+	 */
+	public static List<Position> getNeighbors(Position p, int distance, boolean edgeOnly) {
 		List<Position> result = new ArrayList<Position>();
 		HashMap<Position, Boolean> visited = new HashMap<Position, Boolean>();
 		
@@ -131,11 +153,10 @@ public class Map {
 			for (Position neighbor : adj) {
 				int d = distance(p, neighbor);
 				if (d <= distance && !visited.containsKey(neighbor)) {
-					System.out.println("Considering the new position " + neighbor + " distance " + d);
 					visited.put(neighbor, true);
 					if (d < distance)
 						queue.add(neighbor);
-					else if (d == distance)
+					if (!edgeOnly || d == distance)
 						result.add(neighbor);
 				}
 			}
