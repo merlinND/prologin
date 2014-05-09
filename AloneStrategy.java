@@ -35,7 +35,7 @@ public class AloneStrategy extends Strategy {
 			priority = (1 - priority) * (closeFountainPriority - farFountainPriority);
 			priority += farFountainPriority;
 			
-			o = new DefendObjective(Map.FOUNTAIN_N);
+			o = new DefendObjective(f);
 			o.setPriority(priority);
 			objectives.add(o);
 		}
