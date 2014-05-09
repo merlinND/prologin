@@ -39,6 +39,10 @@ public class Map {
 		return n;
 	}
 	
+	public static boolean hasTower(Position p) {
+		return (Interface.info_case(p) == CaseInfo.CASE_TOURELLE);
+	}
+	
 	/*
 	 * HELPER FUNCTIONS
 	 */

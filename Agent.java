@@ -38,7 +38,6 @@ public abstract class Agent {
 			boolean failed = false, hasCompleted = false;
 			Object[] sorted = objectives.toArray();
 			Arrays.sort(sorted);
-			Logger.log("Going through " + sorted.length + " agent's " + this + " objectives");
 			int i = 0;
 			do {
 				Objective o = (Objective)sorted[i];

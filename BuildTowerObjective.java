@@ -27,7 +27,6 @@ public class BuildTowerObjective extends SpatialObjective {
 		this.parentObjective = parentObjective;
 	}
 	
-	
 	@Override
 	public boolean perform(Phase phase, Agent owner) {
 		Logger.log("Trying to build tower on " + getTarget(), 3);
@@ -50,8 +49,21 @@ public class BuildTowerObjective extends SpatialObjective {
 				}
 			}
 			// If tower is not buildable right now
-			// TODO: try on an adjacent square?
-			// TODO: build recursively so as to make possible
+			// If it requires another tower (build range error),
+			// go ahead and try to build it
+			else if (false) {
+				// TODO: build recursively so as to make it possible
+			}
+			// If the spot is full, try and find an adjacent one
+			else if (Map.hasTower(getTarget())) {
+				for (Position p : Map.getNeighbors(getTarget())) {
+					if (canBuild(p)) {
+						Logger.log("Couldn't build on " + getTarget() + ", we will try on " + p);
+						setTarget(p);
+						break;
+					}
+				}
+			}
 			else {
 				Logger.err("We were not able to build a tower on " + getTarget(), 2);
 				return false;

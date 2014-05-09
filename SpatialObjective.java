@@ -22,4 +22,7 @@ public abstract class SpatialObjective extends Objective {
 	public Position getTarget() {
 		return target;
 	}
+	protected void setTarget(Position target) {
+		this.target = target;
+	}
 }
