@@ -36,7 +36,7 @@ public class Mothership {
 		waitingList = new ArrayList<Entry<Agent, Objective>>();
 		efforts = new HashMap<Objective, List<Agent>>();
 		
-		setStrategy(new BalancedStrategy());
+		setStrategy(new AggressiveStrategy());
 	}
 	
 	public void play(Phase phase) {
@@ -99,6 +99,9 @@ public class Mothership {
 		else if (o instanceof DefendBaseObjective) {
 			addAgent(new HomeAgent(Map.base), o);
 		}
+//		else if (o instanceof KillThemAllObjective) {
+//			addAgent(new HomeAgent(Map.base), o);
+//		}
 		else if (o instanceof OccupyObjective){
 			int available = getResources();
 			if (o.getSpendingLimit() >= 0)
@@ -231,5 +234,13 @@ public class Mothership {
 	 */
 	public int getResources() {
 		return Interface.magie(Interface.moi());
+	}
+
+	/**
+	 * Dynamically add an objective to the current part of the strategy
+	 */
+	public void addObjective(Objective objective) {
+		strategy.addObjective(objective);
+		efforts.put(objective, new ArrayList<Agent>());
 	}
 }

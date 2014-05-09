@@ -43,7 +43,6 @@ public class BalancedStrategy extends Strategy {
 			o = new OccupyObjective(f);
 			o.setPriority(priority);
 			o.setSpendingLimit((int)(maxFountainSpending * priority));
-			System.out.println("Will spend " + o.getSpendingLimit() + " on " + o);
 			fountainObjectives.add(o);
 		}
 		run.addAll(fountainObjectives);

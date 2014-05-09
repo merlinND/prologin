@@ -83,4 +83,12 @@ public abstract class Strategy {
 		this.currentPart = part;
 		Mothership.getInstance().resetObjectives();
 	}
+
+	/**
+	 * Add an objective to the current part
+	 * @param objective
+	 */
+	public void addObjective(Objective objective) {
+		objectives.get(currentPart).add(objective);
+	}
 }

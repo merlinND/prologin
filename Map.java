@@ -8,8 +8,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * Position of the objectives around the map
  * @author Merlin Nimier-David
@@ -28,11 +26,6 @@ public class Map {
 	 */
 	public static Position base;
 	
-	public static List<Position> getOpponentBases() {
-		// TODO
-		throw new NotImplementedException();
-	}
-	
 	public static int numberOfOpponentSorcerers(Position p) {
 		int n = 0;
 		for (int j : Interface.adversaires()) {
@@ -49,6 +42,15 @@ public class Map {
 				for (Tourelle t : Interface.tourelles_joueur(j))
 					result.add(t);
 			}
+		}
+		return result;
+	}
+	
+	public static List<Position> getOpponentBases() {
+		List<Position> result = new ArrayList<Position>();
+		for (int j : Interface.adversaires()) {
+			if (j != Interface.moi())
+				result.add(Interface.base_joueur(j));
 		}
 		return result;
 	}

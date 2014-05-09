@@ -5,8 +5,9 @@ lib_TARGETS = champion
 champion-srcs = Interface.java Prologin.java
 
 # Actually needed for `make tar`
-champion-srcs += Agent.java AloneStrategy.java BalancedStrategy.java BuildTowerObjective.java DefendBaseObjective.java
-champion-srcs += HomeAgent.java DefendObjective.java Logger.java
+champion-srcs += Agent.java AggressiveStrategy.java AloneStrategy.java BalancedStrategy.java
+champion-srcs += BuildTowerObjective.java DefendBaseObjective.java DefendObjective.java
+champion-srcs += HomeAgent.java KillThemAllObjective.java Logger.java
 champion-srcs += Map.java Mothership.java NoopObjective.java Objective.java OccupyObjective.java
 champion-srcs += Phase.java Sorcerers.java Sorcerers.java
 champion-srcs += SpatialObjective.java Strategy.java Tower.java
