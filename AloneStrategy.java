@@ -19,18 +19,26 @@ public class AloneStrategy extends Strategy {
 		objectives.add(o);
 		
 		// TODO: make the closer fountains more prioritary
-		o = new DefendObjective(Map.FOUNTAIN_N);
-		o.setPriority(0.5f);
-		objectives.add(o);
-		o = new DefendObjective(Map.FOUNTAIN_E);
-		o.setPriority(0.5f);
-		objectives.add(o);
-		o = new DefendObjective(Map.FOUNTAIN_S);
-		o.setPriority(0.5f);
-		objectives.add(o);
-		o = new DefendObjective(Map.FOUNTAIN_W);
-		o.setPriority(0.5f);
-		objectives.add(o);
+		Position[] fountains = {
+			Map.FOUNTAIN_N,
+			Map.FOUNTAIN_E,
+			Map.FOUNTAIN_S,
+			Map.FOUNTAIN_W
+		};
+		int maxFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_E),
+			minFountainDistance = Map.distance(new Position(0, 0), Map.FOUNTAIN_N);
+		float closeFountainPriority = 0.5f,
+			  farFountainPriority = 0.1f;
+		for (Position f : fountains) {
+			int d = Map.distance(Map.base, f);
+			float priority = ((d - minFountainDistance) / (float)(maxFountainDistance - minFountainDistance));
+			priority = (1 - priority) * (closeFountainPriority - farFountainPriority);
+			priority += farFountainPriority;
+			
+			o = new DefendObjective(Map.FOUNTAIN_N);
+			o.setPriority(priority);
+			objectives.add(o);
+		}
 		
 		// When everything else is taken care of, just stash money
 		o = new NoopObjective();
