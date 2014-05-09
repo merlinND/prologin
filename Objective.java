@@ -22,7 +22,7 @@ public abstract class Objective implements Comparable<Objective> {
 	
 	@Override
 	public int compareTo(Objective other) {
-		return (int)(this.priority - other.priority);
+		return (int)(other.priority - this.priority);
 	}
 	/*
 	 * GETTERS & SETTERS
