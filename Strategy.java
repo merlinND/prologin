@@ -5,6 +5,8 @@ import java.util.List;
 public abstract class Strategy {
 	protected List<Objective> objectives;
 
+	// TODO: split a strategy into phases (begin / run / end) + an "idle" objective
+	
 	public Strategy() {
 		objectives = new ArrayList<Objective>();
 	}

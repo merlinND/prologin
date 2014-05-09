@@ -52,15 +52,24 @@ public class DefendObjective extends SpatialObjective {
 			int n = Map.numberOfOpponentSorcerers(p);
 			if (n > 0) {
 				n = Math.min(n, owner.getCapacity() - nShots);
-				Interface.tirer(n, owner.getPosition(), p);
+				Erreur status = Interface.tirer(n, owner.getPosition(), p);
+				if (status == Erreur.OK) {
+					System.out.println("Shooting " + p + " (" + n + " arrows)");
+					nShots += n;
+				}
 			}
 		}
 		
-		
+		if (nShots > 0)
+			System.out.println("Shot a total of " + nShots + " arrows");
 		return nShots;
 	}
 	
 	/*
 	 * GETTERS & SETTERS
 	 */
+	@Override
+	public String toString() {
+		return "Objective[Defend objective " + getTarget() + "]";
+	}
 }

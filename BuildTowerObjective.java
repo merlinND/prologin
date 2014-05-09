@@ -55,6 +55,9 @@ public class BuildTowerObjective extends SpatialObjective {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	
+	@Override
+	public String toString() {
+		return "Objective[Build tower on " + getTarget() + "]";
+	}
 
 }

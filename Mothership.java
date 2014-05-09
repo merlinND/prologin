@@ -47,6 +47,7 @@ public class Mothership {
 			while (i < l.size() && getResources() > 0) {
 				Objective o = l.get(i);
 				// TODO: better evaluate the quantity of effort going on
+				// The last effort of the strategy is the one we invest in when everything else is fine
 				if (i == l.size() - 1 || efforts.get(o).size() < 1) {
 					makeEffort(o);
 				}
@@ -79,8 +80,10 @@ public class Mothership {
 		}
 		else {
 			int n = (int)Math.floor(getResources() / (float)Interface.COUT_SORCIER);
-			Sorcerers s = new Sorcerers(Map.base, n);
-			addAgent(s, o);
+			if (n > 0) {
+				Sorcerers s = new Sorcerers(Map.base, n);
+				addAgent(s, o);
+			}
 		}
 	}
 	
@@ -94,20 +97,24 @@ public class Mothership {
 		while(it.hasNext()) {
 			Agent a = it.next();
 			a.update();
-			if (a.isDead()) {
-				it.remove();
-			}
 		}
+		cleanBodies();
 	}
 	
-	public void cleanBodies() {
+	/**
+	 * After having updated each agent, we need to remove them if they're dead
+	 */
+	protected void cleanBodies() {
 		Iterator<Agent> it = agents.iterator();
-		while(it.hasNext()) {
+		while(it.hasNext() && !agents.isEmpty()) {
 			Agent a = it.next();
 			if (a.isDead()) {
+				for (List<Agent> l : efforts.values()) {
+					boolean s = l.remove(a);
+					if (s)
+						System.out.println("agents list now has size " +l.size());
+				}
 				it.remove();
-				for (List<Agent> l : efforts.values())
-					l.remove(a);
 			}
 		}
 	}
@@ -130,6 +137,11 @@ public class Mothership {
 			efforts.put(o, new ArrayList<Agent>());
 	}
 	
+	/**
+	 * 
+	 * @param agent
+	 * @param assignedTo Can be null
+	 */
 	public void addAgent(Agent agent, Objective assignedTo) {
 		agents.add(agent);
 		if (assignedTo != null) {

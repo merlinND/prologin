@@ -26,7 +26,9 @@ public abstract class Agent {
 	public abstract void update();
 	
 	public void performAction(Phase phase) {
-		objectives.peek().perform(phase, this);
+		Objective o = objectives.peek();
+		if (o != null)
+			o.perform(phase, this);
 		// TODO: clear completed objectives
 	}
 	

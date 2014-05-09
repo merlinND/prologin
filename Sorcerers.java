@@ -17,12 +17,13 @@ public class Sorcerers extends Agent {
 			status = Interface.creer(size);
 			if (status == Erreur.MAGIE_INSUFFISANTE)
 				size--;
-		} while (status == Erreur.MAGIE_INSUFFISANTE || size <= 0);
-		// TODO: mark yourself as dead if size == 0 (or automatically at first update)
-		
-		System.out.println("Created " + size + " sorcerers.");
-		
+		} while (status == Erreur.MAGIE_INSUFFISANTE && size > 0);
 		this.size = size;
+		System.out.println("Created " + size + " sorcerers.");
+
+		// Mark yourself as dead if size == 0 (or automatically at first update)
+		if (size <= 0)
+			markDead();
 	}
 	
 	@Override
