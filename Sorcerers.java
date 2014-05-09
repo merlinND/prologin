@@ -19,7 +19,7 @@ public class Sorcerers extends Agent {
 				size--;
 		} while (status == Erreur.MAGIE_INSUFFISANTE && size > 0);
 		this.size = size;
-		System.out.println("Created " + size + " sorcerers.");
+		Logger.log("Created " + size + " sorcerers.", 2);
 
 		// Mark yourself as dead if size == 0 (or automatically at first update)
 		if (size <= 0)
@@ -30,7 +30,7 @@ public class Sorcerers extends Agent {
 	public void update() {	
 		int n = Interface.nb_sorciers(getPosition(), Interface.moi());
 		if (n <= 0) {
-			System.out.println("The sorcerers who were on " + getPosition() + " were all killed.");
+			Logger.log("The sorcerers who were on " + getPosition() + " were all killed.", 3);
 			markDead();
 		}
 		else {
@@ -50,7 +50,7 @@ public class Sorcerers extends Agent {
 		while (distance < Interface.PORTEE_SORCIER && distance < steps.length)
 			destination = steps[distance++];
 		
-		System.out.println("Moving from " + getPosition() + " to " + destination + "(" + (distance-1) + " away)");
+		Logger.log("Moving from " + getPosition() + " to " + destination + "(" + (distance-1) + " away)", 3);
 		Erreur status = Interface.deplacer(getPosition(), destination, getSize());
 		// TODO: handle errors, we could lose agents !
 		if (status == Erreur.OK)

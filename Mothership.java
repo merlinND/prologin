@@ -109,11 +109,8 @@ public class Mothership {
 		while(it.hasNext() && !agents.isEmpty()) {
 			Agent a = it.next();
 			if (a.isDead()) {
-				for (List<Agent> l : efforts.values()) {
-					boolean s = l.remove(a);
-					if (s)
-						System.out.println("agents list now has size " +l.size());
-				}
+				for (List<Agent> l : efforts.values())
+					l.remove(a);
 				it.remove();
 			}
 		}

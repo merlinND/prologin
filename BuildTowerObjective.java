@@ -20,7 +20,7 @@ public class BuildTowerObjective extends SpatialObjective {
 	
 	@Override
 	public boolean perform(Phase phase, Agent owner) {
-		System.out.println("Trying to build tower on " + getTarget());
+		Logger.log("Trying to build tower on " + getTarget(), 3);
 		
 		// If we can build right now, do it
 		if (phase == Phase.BUILD) {
@@ -34,13 +34,13 @@ public class BuildTowerObjective extends SpatialObjective {
 					Mothership.getInstance().addAgent(tower, this);
 				}
 				else {
-					System.err.println("We were not able to build a tower on " + getTarget() + " because " + status);
+					Logger.err("We were not able to build a tower on " + getTarget() + " because " + status, 2);
 				}
 			}
 			// If tower is not buildable right now
 			// TODO: try on an adjacent square?
 			else {
-				System.err.println("We were not able to build a tower on " + getTarget());
+				Logger.err("We were not able to build a tower on " + getTarget(), 2);
 			}
 		}
 		

@@ -3,7 +3,7 @@ verbose: 3
 clients:
   - ./arrogant/champion.so
   - ./noop/champion.so
-  - ./working/champion.so
+  - ./silent/champion.so
   - ./current/champion.so
 names:
   - Player 1

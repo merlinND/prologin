@@ -5,8 +5,8 @@ lib_TARGETS = champion
 champion-srcs = Interface.java Prologin.java
 
 # Actually needed for `make tar`
-champion-srcs += Agent.java AloneStrategy.java BuildTowerObjective.java DefendObjective.java Map.java
-champion-srcs += Mothership.java Objective.java Phase.java Sorcerers.java Sorcerers.java
+champion-srcs += Agent.java AloneStrategy.java BuildTowerObjective.java DefendObjective.java Logger.java
+champion-srcs += Map.java Mothership.java Objective.java Phase.java Sorcerers.java Sorcerers.java
 champion-srcs += SpatialObjective.java Strategy.java Tower.java
 
 champion-cxxflags = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -ggdb3
@@ -18,6 +18,7 @@ champion-srcs += interface.cc
 include ../includes/rules.mk
 
 run: all
+	mkdir -p run/current
 	cp champion.so run/current/champion.so
 	cp *.class run/current
 	(cd run; stechec2-run ./config.yml)
