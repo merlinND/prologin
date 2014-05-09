@@ -49,5 +49,13 @@ public class Tower extends Agent {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	
+	public int getRange() {
+		return tower.portee;
+	}
+	/**
+	 * @return The number of arrows it can shoot at each turn
+	 */
+	public int getCapacity() {
+		return tower.attaque;
+	}
 }

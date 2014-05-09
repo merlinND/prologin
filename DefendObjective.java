@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.List;
+
 
 public class DefendObjective extends SpatialObjective {
 	/*
@@ -15,7 +18,9 @@ public class DefendObjective extends SpatialObjective {
 	public boolean perform(Phase phase, Agent owner) {
 		// As a tower: defending implies killing opponents closest to the position
 		if (owner instanceof Tower) {
-			// TODO
+			if (phase == Phase.SHOOT) {
+				shootIfNecessary((Tower)owner);
+			}
 		}
 		// As a sorcerer : defending implies moving to the position and staying there
 		// TODO: eventually, build a tower to defend that same target (in construction phase)
@@ -25,6 +30,34 @@ public class DefendObjective extends SpatialObjective {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Shoot any enemy nearby, closest to the target first
+	 * @return The number of arrows shot
+	 */
+	protected int shootIfNecessary(Tower owner) {
+		// First protect the target
+		List<Position> targets = Map.getNeighbors(getTarget(), owner.getRange());
+		// And then yourself if possible
+		if (!getTarget().equals(owner.getPosition())) {
+			List<Position> around = Map.getNeighbors(owner.getPosition(), owner.getRange());
+			targets.addAll(around);
+		}
+		
+		int nShots = 0;
+		Iterator<Position> it = targets.iterator();
+		while(nShots < owner.getCapacity() && it.hasNext()) {
+			Position p = it.next();
+			int n = Map.numberOfOpponentSorcerers(p);
+			if (n > 0) {
+				n = Math.min(n, owner.getCapacity() - nShots);
+				Interface.tirer(n, owner.getPosition(), p);
+			}
+		}
+		
+		
+		return nShots;
 	}
 	
 	/*

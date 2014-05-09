@@ -30,6 +30,15 @@ public class Map {
 		throw new NotImplementedException();
 	}
 	
+	public static int numberOfOpponentSorcerers(Position p) {
+		int n = 0;
+		for (int j : Interface.adversaires()) {
+			if (j != Interface.moi())
+				n += Interface.nb_sorciers(p, j);
+		}
+		return n;
+	}
+	
 	/*
 	 * HELPER FUNCTIONS
 	 */
