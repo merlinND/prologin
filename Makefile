@@ -18,7 +18,7 @@ champion-ldflags = -Wl,-rpath -Wl,$(JAVA_HOME)/jre/lib/amd64/server/ -L$(JAVA_HO
 # Evite de toucher a ce qui suit
 champion-dists = interface.hh
 champion-srcs += interface.cc
-include ../includes/rules.mk
+include ./rules.mk
 
 run: all
 	mkdir -p run/current
